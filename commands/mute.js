@@ -42,7 +42,7 @@ module.exports = {
             .setColor('RED')
             .setTitle('Message clear')
             .setTimestamp()
-            .setFooter(`${interaction.member.user.username}`, interaction.member.user.avatarURL());
+            .setFooter({ text: `${interaction.member.user.username}, ${interaction.member.user.avatarURL()}` });
 
         const response = new MessageEmbed().setColor('GREEN');
         const error = new MessageEmbed().setColor('RED');

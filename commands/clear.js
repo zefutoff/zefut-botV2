@@ -28,14 +28,13 @@ module.exports = {
             .setColor('RED')
             .setTitle('Message clear')
             .setTimestamp()
-            .setFooter(`${interaction.member.user.username}`, interaction.member.user.avatarURL());
+            .setFooter({ text: `${interaction.member.user.username}, ${interaction.member.user.avatarURL()}` });
 
         const response = new MessageEmbed().setColor('GREEN');
         const error = new MessageEmbed().setColor('RED');
 
         if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
-            error.setDescription("❌ Tu n'a pas la permission d'utiliser cette commande");
-            return interaction.reply({ embeds: [error], ephemeral: true });
+            return interaction.reply({ embeds: [error.setDescription(`❌ Tu n'as pas les permissions requises pour utiliser cette commande !`)], ephemeral: true });
         }
 
         if (Number > 100 || Number <= 0) {
