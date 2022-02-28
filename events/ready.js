@@ -11,7 +11,7 @@ module.exports = {
         console.log(`Ready! Logged in as ${client.user.tag}`);
 
         client.guilds.cache.get(guildId).roles.cache.forEach(role => {
-            listRoles[`${role.name}`] = role.id;
+            listRoles[`${role.name.replace(/[&\/\\#,+()$~%.│'":*?<>{}]|([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '')}`] = role.id;
 
             fs.writeFile('./utils/roles.json', JSON.stringify(listRoles, null, 4), err => {
                 if (err) console.log('Erreur :' + err);
@@ -19,7 +19,7 @@ module.exports = {
         });
 
         client.guilds.cache.get(guildId).channels.cache.forEach(channel => {
-            listChannels[`${channel.name}`] = channel.id;
+            listChannels[`${channel.name.replace(/[&\/\\#,+()$~%.│'":*?<>{}]|([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '')}`] = channel.id;
 
             fs.writeFile('./utils/channels.json', JSON.stringify(listChannels, null, 4), err => {
                 if (err) console.log('Erreur :' + err);
