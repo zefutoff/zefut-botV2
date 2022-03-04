@@ -1,7 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Client, Permissions, MessageEmbed, CommandInteraction } = require('discord.js');
+const { Permissions, MessageEmbed, CommandInteraction } = require('discord.js');
 const { log } = require('../utils/channels.json');
-const { DA, DG } = require('../utils/roles.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -11,8 +10,6 @@ module.exports = {
         .addUserOption(option => option.setName('user').setDescription("Permet de supprimer les messages d'un seule utilisateur")),
 
     /**
-     *
-     * @param {Client} client
      * @param {CommandInteraction} interaction
      * @returns
      */
@@ -40,8 +37,9 @@ module.exports = {
         }
 
         if (User) {
-            if ((User.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES) && !interaction.member.roles.cache.has(DA)) || !interaction.member.roles.cache.has(DG))
+            if (User.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES) && !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
                 return interaction.reply({ embeds: [error.setDescription(`❌ Tu ne peux pas supprimer les messages de ${User}`)], ephemeral: true });
+            }
 
             let i = 0;
             const filtered = [];
@@ -53,17 +51,23 @@ module.exports = {
             });
 
             await channel.bulkDelete(filtered, true).then(messages => {
-                logs.setDescription(`**${messages.size}** message(s) suprimmés \n \n De **${interaction.member.user.username}** \n  \n Dans le channel **${channel}**`);
-                interaction.guild.channels.cache.get(log).send({ embeds: [logs] });
-                response.setDescription(`✅ ${messages.size} messages de ${User} ont étaient supprimés`);
-                interaction.reply({ embeds: [response], ephemeral: true });
+                interaction.guild.channels.cache.get(log).send({
+                    embeds: [
+                        logs.setDescription(
+                            `**${messages.size}** message(s) suprimmés \n \n De **${interaction.member.user.username}** \n  \n Dans le channel **${channel}**`
+                        )
+                    ]
+                });
+
+                interaction.reply({ embeds: [response.setDescription(`✅ ${messages.size} messages de ${User} ont étaient supprimés`)], ephemeral: true });
             });
         } else {
             await channel.bulkDelete(Number, true).then(messages => {
-                logs.setDescription(`**${messages.size}** message(s) suprimmés \n \n Dans le channel **${channel}**`);
-                interaction.guild.channels.cache.get(log).send({ embeds: [logs], ephemeral: true });
-                response.setDescription(`✅ ${messages.size} messages ont bien étaient supprimés !`);
-                interaction.reply({ embeds: [response], ephemeral: true });
+                interaction.guild.channels.cache
+                    .get(log)
+                    .send({ embeds: [logs.setDescription(`**${messages.size}** message(s) suprimmés \n \n Dans le channel **${channel}**`)], ephemeral: true });
+
+                interaction.reply({ embeds: [response.setDescription(`✅ ${messages.size} messages ont bien étaient supprimés !`)], ephemeral: true });
             });
         }
     }
