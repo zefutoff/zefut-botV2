@@ -50,7 +50,7 @@ module.exports = {
             interaction.guild.channels.cache.get(aide1).send({ embeds: [response] });
         }
 
-        interaction.guild.channels.cache.get(log).send({ embeds: [logs.setDescription(`Le message lié à la commande explain a été envoyé !`)] });
+        interaction.guild.channels.cache.get(log).send({ embeds: [logs.setDescription(`La commande /explain a été exécutée avec succès !`)] });
         return interaction.reply({ embeds: [response.setDescription(`✅ La commande a été exécutée avec succès !`)], ephemeral: true });
     }
 };
