@@ -1,8 +1,4 @@
 const {} = require('discord.js');
-const { guildId } = require('../config.json');
-const fs = require('fs');
-const listRoles = require('../utils/roles.json');
-const listChannels = require('../utils/channels.json');
 
 module.exports = {
     name: 'ready',

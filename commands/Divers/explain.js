@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { CommandInteraction, MessageEmbed, Permissions } = require('discord.js');
-const { log, aide1, aide2 } = require('../utils/channels.json');
-const { helper } = require('../utils/roles.json');
+const { log, aide1, aide2 } = require('../../utils/channels.json');
+const { helper } = require('../../utils/roles.json');
 
 module.exports = {
     data: new SlashCommandBuilder()

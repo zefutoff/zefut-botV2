@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { CommandInteraction, MessageEmbed, MessageActionRow, MessageButton, Sticker } = require('discord.js');
-const { log } = require('../utils/channels.json');
-const { twitch, epic, insta, utip, site } = require('../utils/emoji.json');
+const { log } = require('../../utils/channels.json');
+const { twitch, epic, insta, utip, site } = require('../../utils/emoji.json');
 
 module.exports = {
     data: new SlashCommandBuilder().setName('soutenir').setDescription('Tu obtiendras des liens vers tous les endroits ou tu peux retrouver/aider Zefut !'),
