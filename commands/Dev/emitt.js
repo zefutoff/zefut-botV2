@@ -32,7 +32,7 @@ module.exports = {
                 break;
             case 'guildMemberRemove':
                 {
-                    interaction.client.emit('guildMemberRemoe', interaction.member);
+                    interaction.client.emit('guildMemberRemove', interaction.member);
                     interaction.reply({ content: 'Emitted the event.', ephemeral: true });
                 }
                 break;
