@@ -9,7 +9,7 @@
     "author": "zefut, mega, merlin",
     "license": "ISC",
     "dependencies": {
-        "@discordjs/rest": "0.3.0",
+        "@discordjs/rest": "0.4.1",
         "discord.js": "13.6.0",
         "fs": "0.0.1-security",
         "ms": "2.1.3",
