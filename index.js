@@ -7,6 +7,15 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
 client.commands = new Collection();
 
+const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
+const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
+
+const serviceAccount = require('./serviceAccountKey.json');
+
+initializeApp({
+    credential: cert(serviceAccount)
+});
+
 //Chargement des commandes
 fs.readdirSync((dir = './commands/')).forEach(dirs => {
     const commandFiles = fs.readdirSync(`${dir}/${dirs}/`).filter(files => files.endsWith('.js'));

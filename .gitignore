@@ -210,3 +210,4 @@ $RECYCLE.BIN/
 
 config.json
 utils/
+serviceAccountKey.json

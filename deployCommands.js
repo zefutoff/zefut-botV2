@@ -3,13 +3,25 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const { clientId, guildId, token } = require('./config.json');
 
-const commands = [];
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
+const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
 
-for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    commands.push(command.data.toJSON());
-}
+const serviceAccount = require('./serviceAccountKey.json');
+
+initializeApp({
+    credential: cert(serviceAccount)
+});
+
+const commands = [];
+
+fs.readdirSync((dir = './commands/')).forEach(dirs => {
+    const commandFiles = fs.readdirSync(`${dir}/${dirs}/`).filter(files => files.endsWith('.js'));
+
+    for (const file of commandFiles) {
+        const command = require(`./${dir}/${dirs}/${file}`);
+        commands.push(command.data.toJSON());
+    }
+});
 
 const rest = new REST({ version: '9' }).setToken(token);
 
