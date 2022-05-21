@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { CommandInteraction, MessageEmbed, MessageActionRow, MessageButton, Sticker } = require('discord.js');
+const { CommandInteraction, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const { log } = require('../../utils/channels.json');
 const { twitch, epic, insta, utip, site } = require('../../utils/emoji.json');
 
