@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Permissions, MessageEmbed, CommandInteraction, MessageButton, MessageActionRow, ButtonInteraction } = require('discord.js');
+const { Permissions, MessageEmbed, CommandInteraction, MessageButton, MessageActionRow } = require('discord.js');
 const { log } = require('../../utils/channels.json');
 
 const admin = require('firebase-admin');

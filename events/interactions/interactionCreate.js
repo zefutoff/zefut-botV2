@@ -1,4 +1,5 @@
-const { MessageEmbed, MessageButton } = require('discord.js');
+const { MessageEmbed, MessageButton, GuildMember } = require('discord.js');
+const { log } = require('../../utils/channels.json');
 
 const admin = require('firebase-admin');
 let db = admin.firestore();
@@ -7,15 +8,22 @@ module.exports = {
     name: 'interactionCreate',
     /**
      *
-     * @param {MessageButton} interaction
+     * @param {GuildMember} interaction
+     * @returns
      */
     async execute(interaction) {
         const response = new MessageEmbed().setColor('GREEN');
         const error = new MessageEmbed().setColor('RED');
+        const logs = new MessageEmbed().setColor('RED').setTitle('Message clear').setTimestamp().setFooter({ text: interaction.member.user.username });
 
         const d = new Date();
 
         if (!interaction.isButton()) return;
+
+        const data = interaction.customId.split(', ');
+        const userId = data[1];
+        const user = data[2];
+        const reason = data[3];
 
         if (interaction.customId.includes('False')) {
             interaction.reply({ embeds: [error.setDescription(`❌ Le warn à était annulé.`)], ephemeral: true });
@@ -23,12 +31,9 @@ module.exports = {
         }
 
         if (interaction.customId.includes('True')) {
-            const data = interaction.customId.split(', ');
-            const userId = data[1];
-            const user = data[2];
-            const reason = data[3];
-
             const warn = db.collection('warn').doc(userId);
+
+            console.log(interaction.customId);
 
             const dataUpdate = {
                 numberWarn: 3,
@@ -36,7 +41,7 @@ module.exports = {
                 warn3_date: `${d.toLocaleString()}`,
                 warn3_reason: `${reason}`
             };
-            warn.update(dataUpdate);
+            await warn.update(dataUpdate);
 
             interaction.reply({
                 embeds: [response.setDescription(`✅ ${user} **a été warn pour la raison suivante** : ${reason} \n **Nombre de warn : 3**`)],
@@ -47,7 +52,9 @@ module.exports = {
                 embeds: [logs.setDescription(`${user} **a été averti pour la raison suivante** : ${reason} \n Il en est à son 3eme warn`)]
             });
 
-            user.ban({ reason: 'Cet utilisateur a totalisé 3 warn, conformément au règlement il a été ban (ces bans sont consultables via son id discord)**' });
+            interaction.guild.members.ban(userId, {
+                reason: 'Cet utilisateur a totalisé 3 warn, conformément au règlement il a été ban (ces warns sont consultables via son id discord)'
+            });
         }
     }
 };
