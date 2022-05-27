@@ -9,8 +9,8 @@ module.exports = {
             option
                 .setName('command')
                 .setDescription('Choose command to emitt.')
-                .addChoice('guildMemberAdd', 'guildMemberAdd')
-                .addChoice('guildMemberRemove', 'guildMemberRemove')
+                .addChoices({ name: 'guildMemberAdd', value: 'guildMemberAdd' })
+                .addChoices({ name: 'guildMemberRemove', value: 'guildMemberRemove' })
                 .setRequired(true)
         ),
 

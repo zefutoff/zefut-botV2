@@ -11,8 +11,7 @@ module.exports = {
             option
                 .setName('channel')
                 .setDescription("Salon d'aide dans lequel envoyer le message")
-                .addChoice('Aide-Mcreator', `${aide1}`)
-                .addChoice('Aide-Mcreator-bis', `${aide2}`)
+                .addChoices({ value: `${aide1}`, name: 'Aide-Mcreator' })
                 .setRequired(false)
         ),
     /**
