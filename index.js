@@ -6,9 +6,11 @@ const { token } = require('./config.json');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
 client.commands = new Collection();
+client.buttons = new Collection();
+client.selectMenu = new Collection();
 
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
-const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
+//const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
 
 const serviceAccount = require('./serviceAccountKey.json');
 
@@ -27,6 +29,28 @@ fs.readdirSync((dir = './commands/')).forEach(dirs => {
     }
 });
 
+//Chargement des boutons
+fs.readdirSync((dir = './buttons/')).forEach(dirs => {
+    const buttonsFile = fs.readdirSync(`${dir}/${dirs}/`).filter(files => files.endsWith('.js'));
+
+    for (const file of buttonsFile) {
+        const button = require(`./${dir}/${dirs}/${file}`);
+        client.buttons.set(button.name, button);
+        console.log(button.name + ' --> succès !');
+    }
+});
+
+//Chargement des menu de séléction
+fs.readdirSync((dir = './selectsMenu/')).forEach(dirs => {
+    const selectMenuFile = fs.readdirSync(`${dir}/${dirs}/`).filter(files => files.endsWith('.js'));
+
+    for (const file of selectMenuFile) {
+        const selectMenu = require(`./${dir}/${dirs}/${file}`);
+        client.selectMenu.set(selectMenu.name, selectMenu);
+        console.log(selectMenu.name + ' --> succès !');
+    }
+});
+
 //Chargement des événements
 fs.readdirSync((dir = './events/')).forEach(dirs => {
     const eventFiles = fs.readdirSync(`${dir}/${dirs}/`).filter(files => files.endsWith('.js'));
@@ -37,21 +61,6 @@ fs.readdirSync((dir = './events/')).forEach(dirs => {
             client.once(event.name, (...args) => event.execute(...args));
         } else {
             client.on(event.name, (...args) => event.execute(...args));
-        }
-    }
-});
-
-client.on('interactionCreate', async interaction => {
-    if (interaction.isCommand()) {
-        const command = client.commands.get(interaction.commandName);
-
-        if (!command) return;
-
-        try {
-            await command.execute(interaction);
-        } catch (error) {
-            console.log(error);
-            await interaction.reply({ content: 'Command failed', ephemeral: true });
         }
     }
 });
