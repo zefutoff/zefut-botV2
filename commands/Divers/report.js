@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { CommandInteraction, MessageEmbed, Permissions, MessageActionRow, MessageSelectMenu } = require('discord.js');
+const { CommandInteraction, MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
 const { log } = require('../../utils/channels.json');
 
 module.exports = {
@@ -9,12 +9,7 @@ module.exports = {
      */
     async execute(interaction) {
         const response = new MessageEmbed().setColor('GREEN');
-        const error = new MessageEmbed().setColor('RED');
         const logs = new MessageEmbed().setColor('RED').setTitle('').setTimestamp().setFooter({ text: interaction.member.user.username });
-
-        if (interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
-            return interaction.reply({ embeds: [error.setDescription(`❌ Tu n'as pas accès à cette commande en tant qu'adiministrateur !`)], ephemeral: true });
-        }
 
         interaction.reply({
             embeds: [
