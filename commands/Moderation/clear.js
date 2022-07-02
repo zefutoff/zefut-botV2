@@ -6,9 +6,19 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('clear')
         .setDescription('Supprime des messages dans un channel')
-        .addNumberOption(option => option.setName('nombre').setDescription('Nombre de message à suppirmer').setRequired(true))
-        .addUserOption(option => option.setName('user').setDescription("Permet de supprimer les messages d'un seule utilisateur")),
-
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('usermessage')
+                .setDescription("Supprime les messages d'un utilisateur dans la channel")
+                .addUserOption(option => option.setName('user').setDescription("Permet de supprimer les messages d'un seule utilisateur").setRequired(true))
+                .addNumberOption(option => option.setName('nombre').setDescription('Nombre de message à suppirmer').setRequired(true))
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('message')
+                .setDescription('Supprime les messages du channel')
+                .addNumberOption(option => option.setName('nombre').setDescription('Nombre de message à suppirmer').setRequired(true))
+        ),
     /**
      * @param {CommandInteraction} interaction
      * @returns
@@ -18,7 +28,6 @@ module.exports = {
         const { channel, options } = interaction;
 
         const Number = options.getNumber('nombre');
-        const User = options.getMember('user');
 
         const Messages = await channel.messages.fetch();
 
@@ -36,7 +45,9 @@ module.exports = {
             return interaction.reply({ embeds: [error], ephemeral: true });
         }
 
-        if (User) {
+        if (options.getSubcommand() === 'usermessage') {
+            const User = options.getMember('user');
+
             if (User.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES) && !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
                 return interaction.reply({ embeds: [error.setDescription(`❌ Tu ne peux pas supprimer les messages de ${User}`)], ephemeral: true });
             }
@@ -61,7 +72,9 @@ module.exports = {
 
                 interaction.reply({ embeds: [response.setDescription(`✅ ${messages.size} messages de ${User} ont étaient supprimés`)], ephemeral: true });
             });
-        } else {
+        }
+
+        if (options.getSubcommand() === 'message') {
             await channel.bulkDelete(Number, true).then(messages => {
                 interaction.guild.channels.cache
                     .get(log)

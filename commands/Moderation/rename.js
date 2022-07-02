@@ -1,13 +1,24 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Permissions, MessageEmbed, CommandInteraction } = require('discord.js');
+const { Permissions, MessageEmbed, CommandInteraction, User } = require('discord.js');
 const { log } = require('../../utils/channels.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('renommer')
         .setDescription('Permet de renomer un les utilisateurs')
-        .addUserOption(option => option.setName('user').setDescription("Utilisateur concerné par la demande d'information").setRequired(true))
-        .addStringOption(option => option.setName('username').setDescription("Nouveau nom d'utilisateur").setRequired(true)),
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('all')
+                .setDescription('Renomme tous les utilisateurs du discord')
+                .addStringOption(option => option.setName('username').setDescription("Nouveau nom d'utilisateur").setRequired(true))
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('user')
+                .setDescription('Renommer un utilisateur')
+                .addUserOption(option => option.setName('user').setDescription("Utilisateur concerné par la demande d'information").setRequired(true))
+                .addStringOption(option => option.setName('username').setDescription("Nouveau nom d'utilisateur").setRequired(true))
+        ),
 
     /**
      * @param {CommandInteraction} interaction
@@ -20,8 +31,6 @@ module.exports = {
         const error = new MessageEmbed().setColor('RED');
         const response = new MessageEmbed().setColor('GREEN');
         const logs = new MessageEmbed().setColor('RED').setTitle('Message clear').setTimestamp().setFooter({ text: interaction.member.user.username });
-
-        const User = options.getMember('user');
 
         const Username = options.getString('username');
 
@@ -36,13 +45,45 @@ module.exports = {
             });
         }
 
-        interaction.guild.members.cache.get(User.id).setNickname(Username);
+        if (options.getSubcommand() === 'all') {
+            interaction.guild.members.cache.forEach(r =>
+                r
+                    .setNickname(Username)
+                    .catch(e =>
+                        interaction.guild.channels.cache
+                            .get(log)
+                            .send({ embeds: [logs.setTitle('[Dev] - ERROR').setDescription(`Je ne parviens pas à renommer ${r.user}\n \`${e}\``)], ephemeral: true })
+                    )
+            );
 
-        interaction.guild.channels.cache.get(log).send({ embeds: [logs.setDescription(`**${interaction.user} à renommé ${User.user}**`)], ephemeral: true });
+            interaction.guild.channels.cache
+                .get(log)
+                .send({ embeds: [logs.setDescription(`**${interaction.user} à renommer tous les membres du serveur**`)], ephemeral: true });
 
-        return interaction.reply({
-            embeds: [response.setDescription(`✅ ${User} à était renommé !`)],
-            ephemeral: true
-        });
+            return interaction.reply({
+                embeds: [response.setDescription(`✅ Tous les membres on étaient renommés en **${Username}**`)],
+                ephemeral: true
+            });
+        }
+
+        if (options.getSubcommand() === 'user') {
+            const User = options.getMember('user');
+
+            interaction.guild.members.cache
+                .get(User.id)
+                .setNickname(Username)
+                .catch(e =>
+                    interaction.guild.channels.cache
+                        .get(log)
+                        .send({ embeds: [logs.setTitle('[Dev] - ERROR').setDescription(`Je ne parviens pas à renommer ${r.user}\n \`${e}\``)], ephemeral: true })
+                );
+
+            interaction.guild.channels.cache.get(log).send({ embeds: [logs.setDescription(`**${interaction.user} à renommé ${User.user}**`)], ephemeral: true });
+
+            return interaction.reply({
+                embeds: [response.setDescription(`✅ ${User.user.tag} à était renommé !`)],
+                ephemeral: true
+            });
+        }
     }
 };
