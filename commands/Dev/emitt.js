@@ -11,6 +11,7 @@ module.exports = {
                 .setDescription('Choose command to emitt.')
                 .addChoices({ name: 'guildMemberAdd', value: 'guildMemberAdd' })
                 .addChoices({ name: 'guildMemberRemove', value: 'guildMemberRemove' })
+                .addChoices({ name: 'messageCreate', value: 'messageCreate' })
                 .setRequired(true)
         ),
 
@@ -36,6 +37,10 @@ module.exports = {
                     interaction.reply({ content: 'Emitted the event.', ephemeral: true });
                 }
                 break;
+            case 'messageCreate': {
+                interaction.client.emit('messageCreate', interaction.member);
+                interaction.reply({ content: 'Emitted the event.', ephemeral: true });
+            }
         }
     }
 };
