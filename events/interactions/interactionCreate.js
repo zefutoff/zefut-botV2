@@ -12,9 +12,11 @@ module.exports = {
     async execute(interaction, client) {
         const logs = new MessageEmbed().setColor('RED').setTitle('').setTimestamp().setFooter({ text: interaction.member.user.username });
 
-        const interactionErro = interaction.guild.channels.cache.get(log).send({
-            embeds: [logs.setTitle('[Dev] - Interaction  inconu').setDescription(`Une interaction inconu à était reçu : **${interaction.customId}**`)]
-        });
+        function sendMsgError(object) {
+            interaction.guild.channels.cache.get(log).send({
+                content: `[Dev] - ${object} inconu Une interaction inconu à était reçu : ${interaction.customId}**`
+            });
+        }
 
         if (interaction.isCommand()) {
             const command = interaction.client.commands.get(interaction.commandName);
@@ -31,13 +33,13 @@ module.exports = {
 
         if (interaction.isButton()) {
             const btn = interaction.client.buttons.get(interaction.customId.substring(0, interaction.customId.indexOf(',')));
-            if (!menu) return interactionErro;
+            if (!btn) return sendMsgError('boutton');
             btn.execute(client, interaction);
         }
 
-        if (interaction.isSelectMenu()) {
+        if (interaction.isSelectMenu('SelectMenu')) {
             const menu = interaction.client.selectMenu.get(interaction.customId.substring(0, interaction.customId.indexOf(',')));
-            if (!menu) return interactionErro;
+            if (!menu) return sendMsgError();
             menu.execute(client, interaction);
         }
     }
