@@ -36,49 +36,6 @@ module.exports = {
             }
         }
 
-        if (message.channelId === aide1) {
-            for (let index = 0; index < bannedVersions.length; index++) {
-                if (message.content.includes(bannedVersions[index].version)) {
-                    if (bannedVersions[index].exlued === '%message%' && manageMessage() == true) return;
-                    message.reply({
-                        embeds: [response.setDescription(bannedVersions[index].response.replaceAll('%username%', user))],
-                        components: [
-                            new MessageActionRow().addComponents(
-                                new MessageButton().setLabel('Comment mettre à jour mon mod ?').setStyle('LINK').setURL('https://www.youtube.com/watch?v=Ut-POeZ-V3U'),
-                                new MessageButton().setLabel('Dernière version de Mcreator').setStyle('LINK').setURL('https://mcreator.net/download')
-                            )
-                        ],
-                        ephemeral: true
-                    });
-
-                    return message.guild.channels.cache.get(log).send({
-                        embeds: [
-                            logs.setDescription(`**Message suprimmé :** ${message.content} \n \n **De :**${userName} \n  \n **Dans le channel :**${message.channel}`)
-                        ]
-                    });
-                }
-            }
-
-            if (message.content.length > 20) {
-                await message.channel.threads.create({
-                    name: message.content.substring(0, 99).replace(/\n|\r/g, '')
-                });
-
-                const thread = message.channel.threads.cache.find(async x => (await x.name) === message.content.substring(0, 99));
-
-                await thread.members.add(userId);
-
-                message.guild.channels.cache.get(log).send({
-                    embeds: [
-                        //Message de log a refaire entirement
-                        logs.setDescription(
-                            `**Fils Mcreator :** ${message.content.substring(0, 99)} \n \n **De :**${userName} \n  \n **Message enovyé :**${message.content}`
-                        )
-                    ]
-                });
-            }
-        }
-
         for (let index = 0; index < bannedWords.length; index++) {
             if (message.content.replace(/\s/g, '').toLocaleLowerCase().includes(bannedWords[index].word)) {
                 if (bannedWords[index].exlued === '%admin%' && admin() == true) return;
