@@ -1,4 +1,4 @@
-const { Message, MessageEmbed, Permissions, MessageActionRow, MessageButton } = require('discord.js');
+const { Message, EmbedBuilder, PermissionsBitField, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 
 const { log, aide1 } = require('../../utils/channels.json');
 const { bannedWords } = require('../../utils/bannedWords.json');
@@ -13,14 +13,15 @@ module.exports = {
      * @returns
      */
     async execute(message, client) {
-        const logs = new MessageEmbed().setColor('RED').setTitle('[Auto-mod] Message supprimé').setTimestamp();
-        const response = new MessageEmbed().setColor('GREEN');
+        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('[Auto-mod] Message supprimé').setTimestamp();
+        const response = new EmbedBuilder().setColor('#57F287');
 
+        if (message.author.bot) return;
+
+        console.log(message);
         const user = message.member.user;
         const userName = user.username;
         const userId = user.id;
-
-        if (message.author.bot) return;
 
         if (message.mentions.members.size > 0) {
             message.guild.channels.cache.get(log).send({
@@ -53,15 +54,15 @@ module.exports = {
         }
 
         function admin() {
-            if (message.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return true;
+            if (message.member.PermissionsBitField.has(PermissionsBitField.FLAGS.ADMINISTRATOR)) return true;
         }
 
         function banMember() {
-            if (message.member.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) return true;
+            if (message.member.PermissionsBitField.has(PermissionsBitField.FLAGS.BAN_MEMBERS)) return true;
         }
 
         function manageMessage() {
-            if (message.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return true;
+            if (message.member.PermissionsBitField.has(PermissionsBitField.FLAGS.MANAGE_MESSAGES)) return true;
         }
     }
 };

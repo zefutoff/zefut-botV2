@@ -1,4 +1,4 @@
-const { MessageEmbed, WebhookClient, GuildMember } = require('discord.js');
+const { EmbedBuilder, WebhookClient, GuildMember } = require('discord.js');
 const { webhookId, webhookToken } = require('../../config.json');
 const { messages } = require('../../utils/welcomeMsg.json');
 const { roles, règlement } = require('../../utils/channels.json');
@@ -18,8 +18,8 @@ module.exports = {
             token: webhookToken
         });
 
-        const msg = new MessageEmbed()
-            .setColor('GREEN')
+        const msg = new EmbedBuilder()
+            .setColor('#57F287')
             .setAuthor({ name: member.displayName, iconURL: member.user.avatarURL() })
             .setDescription(
                 messages[random].sentence

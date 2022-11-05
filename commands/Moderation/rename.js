@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Permissions, MessageEmbed, CommandInteraction, User } = require('discord.js');
+const { PermissionsBitField, EmbedBuilder, CommandInteraction, User, SlashCommandBuilder } = require('discord.js');
 const { log } = require('../../utils/channels.json');
 
 module.exports = {
@@ -28,14 +27,17 @@ module.exports = {
     async execute(interaction) {
         const { options } = interaction;
 
-        const error = new MessageEmbed().setColor('RED');
-        const response = new MessageEmbed().setColor('GREEN');
-        const logs = new MessageEmbed().setColor('RED').setTitle('Message clear').setTimestamp().setFooter({ text: interaction.member.user.username });
+        const error = new EmbedBuilder().setColor('#ED4245');
+        const response = new EmbedBuilder().setColor('#57F287');
+        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('Message clear').setTimestamp().setFooter({ text: interaction.member.user.username });
 
         const Username = options.getString('username');
 
-        if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_NICKNAMES)) {
-            return interaction.reply({ embeds: [error.setDescription(`❌ Tu n'as pas les permissions requises pour utiliser cette commande !`)], ephemeral: true });
+        if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageNicknames)) {
+            return interaction.reply({
+                embeds: [error.setDescription(`❌ Tu n'as pas les PermissionsBitField requises pour utiliser cette commande !`)],
+                ephemeral: true
+            });
         }
 
         if (Username.length > 32) {

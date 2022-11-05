@@ -1,4 +1,4 @@
-const { Interaction, MessageEmbed } = require('discord.js');
+const { Interaction, EmbedBuilder } = require('discord.js');
 
 const { log } = require('../../utils/channels.json');
 
@@ -10,7 +10,7 @@ module.exports = {
      * @returns
      */
     async execute(interaction, client) {
-        const logs = new MessageEmbed().setColor('RED').setTitle('').setTimestamp().setFooter({ text: interaction.member.user.username });
+        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('test').setTimestamp().setFooter({ text: interaction.member.user.username });
 
         function sendMsgError(object) {
             interaction.guild.channels.cache.get(log).send({

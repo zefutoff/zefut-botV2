@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { log } = require('../../utils/channels.json');
 
 const admin = require('firebase-admin');
@@ -7,8 +7,8 @@ let db = admin.firestore();
 module.exports = {
     name: 'WarnChooseDelete',
     async execute(client, interaction) {
-        const response = new MessageEmbed().setColor('GREEN');
-        const logs = new MessageEmbed().setColor('RED').setTitle('').setTimestamp().setFooter({ text: interaction.member.user.username });
+        const response = new EmbedBuilder().setColor('#57F287');
+        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('test').setTimestamp().setFooter({ text: interaction.member.user.username });
 
         const data = interaction.customId.split(', ');
         const userId = data[1];

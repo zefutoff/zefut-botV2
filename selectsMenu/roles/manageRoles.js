@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { log, administrator } = require('../../utils/channels.json');
 const { youtube, twitch, Mcreator } = require('../../utils/roles.json');
 
@@ -9,8 +9,8 @@ module.exports = {
         const userId = data[1];
         const user = interaction.guild.members.cache.get(userId);
 
-        const response = new MessageEmbed().setColor('GREEN');
-        const logs = new MessageEmbed().setColor('RED').setTitle('').setTimestamp().setFooter({ text: interaction.member.user.username });
+        const response = new EmbedBuilder().setColor('#57F287');
+        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('test').setTimestamp().setFooter({ text: interaction.member.user.username });
 
         if (interaction.values.includes(youtube)) {
             await interaction.guild.members.cache.get(userId).roles.add(youtube);

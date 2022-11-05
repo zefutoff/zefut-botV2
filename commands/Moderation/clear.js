@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Permissions, MessageEmbed, CommandInteraction } = require('discord.js');
+const { PermissionsBitField, EmbedBuilder, CommandInteraction, SlashCommandBuilder } = require('discord.js');
 const { log } = require('../../utils/channels.json');
 
 module.exports = {
@@ -31,13 +30,16 @@ module.exports = {
 
         const Messages = await channel.messages.fetch();
 
-        const logs = new MessageEmbed().setColor('RED').setTitle('Message clear').setTimestamp().setFooter({ text: interaction.member.user.username });
+        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('Message clear').setTimestamp().setFooter({ text: interaction.member.user.username });
 
-        const response = new MessageEmbed().setColor('GREEN');
-        const error = new MessageEmbed().setColor('RED');
+        const response = new EmbedBuilder().setColor('#57F287');
+        const error = new EmbedBuilder().setColor('#ED4245');
 
-        if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
-            return interaction.reply({ embeds: [error.setDescription(`❌ Tu n'as pas les permissions requises pour utiliser cette commande !`)], ephemeral: true });
+        if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
+            return interaction.reply({
+                embeds: [error.setDescription(`❌ Tu n'as pas les PermissionsBitField requises pour utiliser cette commande !`)],
+                ephemeral: true
+            });
         }
 
         if (Number > 100 || Number <= 0) {
@@ -48,7 +50,7 @@ module.exports = {
         if (options.getSubcommand() === 'usermessage') {
             const User = options.getMember('user');
 
-            if (User.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES) && !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
+            if (User.permissions.has(PermissionsBitField.Flags.ManageMessages) && !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
                 return interaction.reply({ embeds: [error.setDescription(`❌ Tu ne peux pas supprimer les messages de ${User}`)], ephemeral: true });
             }
 

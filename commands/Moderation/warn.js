@@ -1,9 +1,11 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Permissions, MessageEmbed, CommandInteraction, MessageButton, MessageActionRow } = require('discord.js');
+const { PermissionsBitField, EmbedBuilder, CommandInteraction, ButtonBuilder, ActionRowBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 const { log } = require('../../utils/channels.json');
 
 const admin = require('firebase-admin');
 let db = admin.firestore();
+
+//TODO :
+//  - On peut se warn soit même
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -23,20 +25,23 @@ module.exports = {
         const user = options.getMember('user');
         const reason = options.getString('reason');
 
-        const logs = new MessageEmbed().setColor('RED').setTitle('Utilisateur averti').setTimestamp().setFooter({ text: interaction.member.user.username });
-        const response = new MessageEmbed().setColor('GREEN');
-        const error = new MessageEmbed().setColor('RED');
+        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('Utilisateur averti').setTimestamp().setFooter({ text: interaction.member.user.username });
+        const response = new EmbedBuilder().setColor('#57F287');
+        const error = new EmbedBuilder().setColor('#ED4245');
 
         const warn = db.collection('warn').doc(user.id);
         const doc = await warn.get();
 
         const d = new Date();
 
-        if (!interaction.member.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {
-            return interaction.reply({ embeds: [error.setDescription(`❌ Tu n'as pas les permissions requises pour utiliser cette commande !`)], ephemeral: true });
+        if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) {
+            return interaction.reply({
+                embeds: [error.setDescription(`❌ Tu n'as pas les PermissionsBitField requises pour utiliser cette commande !`)],
+                ephemeral: true
+            });
         }
 
-        if (user.permissions.has(Permissions.FLAGS.BAN_MEMBERS) && !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
+        if (user.permissions.has(PermissionsBitField.Flags.BanMembers) && !interaction.member.PermissionsBitField.has(PermissionsBitField.Flags.Administrator)) {
             return interaction.reply({ embeds: [error.setDescription(`❌ Tu ne peux pas warn ${user}`)], ephemeral: true });
         }
 
@@ -92,9 +97,9 @@ module.exports = {
                         response.setDescription(`${user} comptabilise dejà 2 warn ce qui veut dire qu'il va être bannis, confirme tu la sanction ? `).setColor('ORANGE')
                     ],
                     components: [
-                        new MessageActionRow().addComponents(
-                            new MessageButton().setLabel('CONFIRMER').setStyle('SUCCESS').setCustomId(`True, ${user.id}, ${user}, ${reason}`),
-                            new MessageButton().setLabel('ANNULER').setStyle('DANGER').setCustomId('False')
+                        new ActionRowBuilder().addComponents(
+                            new ButtonBuilder().setLabel('CONFIRMER').setStyle('SUCCESS').setCustomId(`AddWarn, ${user.id}, ${user}, ${reason}`),
+                            new ButtonBuilder().setLabel('ANNULER').setStyle(ButtonStyle.Danger).setCustomId('False')
                         )
                     ],
                     ephemeral: true

@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, SelectMenuBuilder } = require('discord.js');
 const { log } = require('../../utils/channels.json');
 
 const admin = require('firebase-admin');
@@ -7,8 +7,8 @@ let db = admin.firestore();
 module.exports = {
     name: 'WarnDel',
     async execute(client, interaction) {
-        const response = new MessageEmbed().setColor('GREEN');
-        const logs = new MessageEmbed().setColor('RED').setTitle('').setTimestamp().setFooter({ text: interaction.member.user.username });
+        const response = new EmbedBuilder().setColor('#57F287');
+        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('test').setTimestamp().setFooter({ text: interaction.member.user.username });
 
         const data = interaction.customId.split(', ');
         const userId = data[1];
@@ -23,8 +23,8 @@ module.exports = {
         interaction.reply({
             embeds: [response.setTitle('Choisir un avertissement à supprimer')],
             components: [
-                new MessageActionRow().addComponents(
-                    new MessageSelectMenu()
+                new ActionRowBuilder().addComponents(
+                    new SelectMenuBuilder()
                         .setCustomId(`WarnChooseDelete, ${userId}, ${user}`)
                         .setPlaceholder('Aucun avertissement selectionné')
                         .addOptions([
@@ -35,7 +35,7 @@ module.exports = {
                             },
                             {
                                 label: 'Avertissement 2',
-                                description: `${warn2R.substring(0, 50)}`,
+                                description: `${warn2R.substring(0, 50) || 'Aucun'}`,
                                 value: 'seconde_warn'
                             }
                         ])

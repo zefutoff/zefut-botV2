@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { CommandInteraction, MessageEmbed, Permissions } = require('discord.js');
+const { CommandInteraction, EmbedBuilder, PermissionsBitFieldBitField, SlashCommandBuilder } = require('discord.js');
 const { log, aide1 } = require('../../utils/channels.json');
 const { helper } = require('../../utils/roles.json');
 
@@ -22,10 +21,10 @@ module.exports = {
 
         const channelId = options.getString('channel');
 
-        const error = new MessageEmbed().setColor('RED');
-        const logs = new MessageEmbed().setTitle('/Explain').setTimestamp().setFooter({ text: interaction.member.user.username });
-        const response = new MessageEmbed()
-            .setColor('GREEN')
+        const error = new EmbedBuilder().setColor('#ED4245');
+        const logs = new EmbedBuilder().setTitle('/Explain').setTimestamp().setFooter({ text: interaction.member.user.username });
+        const response = new EmbedBuilder()
+            .setColor('#57F287')
             .setTitle('__Pour qu’on puisse t’aider au mieux__')
             .setDescription(
                 `✅ Définis un thème pour ta demande (gui/biome/armure/...) \n
@@ -38,8 +37,11 @@ module.exports = {
             **on te répondra pas plus vite**`
             );
 
-        if (!interaction.member.roles.cache.has(helper) && !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR))
-            return interaction.reply({ embeds: [error.setDescription(`❌ Tu n'as pas les permissions requises pour utiliser cette commande !`)], ephemeral: true });
+        if (!interaction.member.roles.cache.has(helper) && !interaction.member.permissions.has(PermissionsBitFieldBitField.Flags.Administrator))
+            return interaction.reply({
+                embeds: [error.setDescription(`❌ Tu n'as pas les PermissionsBitField requises pour utiliser cette commande !`)],
+                ephemeral: true
+            });
 
         if (!channelId) {
             interaction.guild.channels.cache.get(aide1).send({ embeds: [response] });

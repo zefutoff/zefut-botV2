@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Permissions, MessageEmbed, CommandInteraction, MessageActionRow, MessageButton } = require('discord.js');
+const { PermissionsBitField, EmbedBuilder, CommandInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 const { log } = require('../../utils/channels.json');
 const moment = require('moment');
 
@@ -21,11 +20,11 @@ module.exports = {
         const { options } = interaction;
 
         const User = options.getMember('user');
-        const error = new MessageEmbed().setColor('RED');
+        const error = new EmbedBuilder().setColor('#ED4245');
 
         var warnNbr = 0;
 
-        const logs = new MessageEmbed().setColor('RED').setTitle('Commande info').setTimestamp().setFooter({ text: interaction.member.user.username });
+        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('Commande info').setTimestamp().setFooter({ text: interaction.member.user.username });
 
         const warn = db.collection('warn').doc(User.id);
         const doc = await warn.get();
@@ -34,24 +33,29 @@ module.exports = {
             warnNbr = doc._fieldsProto.numberWarn.integerValue;
         }
 
-        const response = new MessageEmbed()
-            .setColor('GREEN')
+        const response = new EmbedBuilder()
+            .setColor('#57F287')
             .setThumbnail(User.displayAvatarURL())
             .setTitle(`Voici les informations concernant ${User.user.username} :`)
-            .addField(
-                `:file_folder: ${User.user.username}`,
-                `**Nom Complet :** ${User.user.tag}
+            .addFields([
+                {
+                    name: `:file_folder: ${User.user.username}`,
+                    value: `**Nom Complet :** ${User.user.tag}
             **Surnom :** ${User.nickname === null ? 'Aucun' : `${User.nickname}`}
             **Id :** ${User.id}
             **Compte Crée le** ${moment(User.user.createdAt).format('DD/MM/YYYY | HH:mm')}
             **Présent sur le serveur depuis le** ${moment(User.joinedAt).format('DD/MM/YYYY | HH:mm')}
             **Nombre d'infraction(s) :** ${warnNbr}
         `
-            )
+                }
+            ])
             .setTimestamp();
 
-        if (!interaction.member.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {
-            return interaction.reply({ embeds: [error.setDescription(`❌ Tu n'as pas les permissions requises pour utiliser cette commande !`)], ephemeral: true });
+        if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) {
+            return interaction.reply({
+                embeds: [error.setDescription(`❌ Tu n'as pas les PermissionsBitField requises pour utiliser cette commande !`)],
+                ephemeral: true
+            });
         }
 
         if (warnNbr === 0) {
@@ -75,8 +79,8 @@ module.exports = {
                 })
             ],
             components: [
-                new MessageActionRow().addComponents(
-                    new MessageButton().setLabel('Voir les avertissements').setStyle('PRIMARY').setCustomId(`WarnInfo, ${User.id}, ${User}`)
+                new ActionRowBuilder().addComponents(
+                    new ButtonBuilder().setLabel('Voir les avertissements').setStyle(ButtonStyle.Primary).setCustomId(`WarnInfo, ${User.id}, ${User}`)
                 )
             ],
             ephemeral: true

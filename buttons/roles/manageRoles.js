@@ -1,18 +1,18 @@
-const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, SelectMenuBuilder } = require('discord.js');
 const { log } = require('../../utils/channels.json');
 const { youtube, twitch, Mcreator } = require('../../utils/roles.json');
 
 module.exports = {
     name: 'manageRoles',
     async execute(client, interaction) {
-        const logs = new MessageEmbed().setColor('RED').setTitle('').setTimestamp().setFooter({ text: interaction.member.user.username });
+        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('test').setTimestamp().setFooter({ text: interaction.member.user.username });
 
-        const response = new MessageEmbed().setColor('GREEN');
+        const response = new EmbedBuilder().setColor('#57F287');
 
         interaction.reply({
             components: [
-                new MessageActionRow().addComponents(
-                    new MessageSelectMenu()
+                new ActionRowBuilder().addComponents(
+                    new SelectMenuBuilder()
                         .setMaxValues(3)
                         .setCustomId(`manageRoles, ${interaction.member.user.id}, ${interaction.member.user}`)
                         .setPlaceholder('Aucun sujet selectionné')

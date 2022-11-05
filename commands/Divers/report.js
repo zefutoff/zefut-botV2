@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { CommandInteraction, MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
+const { CommandInteraction, EmbedBuilder, ActionRowBuilder, SelectMenuBuilder, SlashCommandBuilder } = require('discord.js');
 const { log } = require('../../utils/channels.json');
 
 module.exports = {
@@ -8,31 +7,36 @@ module.exports = {
      * @param {CommandInteraction} interaction
      */
     async execute(interaction) {
-        const response = new MessageEmbed().setColor('GREEN');
-        const logs = new MessageEmbed().setColor('RED').setTitle('').setTimestamp().setFooter({ text: interaction.member.user.username });
+        const response = new EmbedBuilder().setColor('#57F287');
+        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('test').setTimestamp().setFooter({ text: interaction.member.user.username });
 
         interaction.reply({
             embeds: [
                 response
                     .setTitle(`:warning: ${interaction.member.user.username} cette commande peut avoir de lourde conséquences :warning:`)
-                    .addField("__Contestation d'une sanction__", "Si les administrateurs estimes que ta contestation n'es pas fondée, elle sera automatiquement doublé.")
-                    .addField(
-                        '__Raporter un bug__',
-                        "Avant de nous signaler un de ces problèmes assure toi que le staff n'est pas dèjà au courant (passe faire un tour dans le salon annonce par exemples)"
-                    )
-                    .addField(
-                        '__Problème avec un modérateur__',
-                        "Les administrateurs et que Zefut etudirons tous ces signalements, si ils ne sont pas fondés la sanction pourrait aller jusqu'au banissement definitif"
-                    )
-                    .addField(
-                        '__Problème avec un administrateur__',
-                        "Zefut etudira tous ces signalements, si ils ne sont pas fondés la sanction pourrait aller jusqu'au banissement definitif"
-                    )
+                    .addFields([
+                        {
+                            name: "__Contestation d'une sanction__",
+                            value: "Si les administrateurs estimes que ta contestation n'es pas fondée, elle sera automatiquement doublé."
+                        },
+                        {
+                            name: '__Raporter un bug__',
+                            value: "Avant de nous signaler un de ces problèmes assure toi que le staff n'est pas dèjà au courant (passe faire un tour dans le salon annonce par exemples)"
+                        },
+                        {
+                            name: '__Problème avec un modérateur__',
+                            value: "Les administrateurs et que Zefut etudirons tous ces signalements, si ils ne sont pas fondés la sanction pourrait aller jusqu'au banissement definitif"
+                        },
+                        {
+                            name: '__Problème avec un administrateur__',
+                            value: "Zefut etudira tous ces signalements, si ils ne sont pas fondés la sanction pourrait aller jusqu'au banissement definitif"
+                        }
+                    ])
                     .setDescription(`Une fois que tu as pris connaissance de toutes ces informations nous t'inviterons à choisir la raison de ton signalement :`)
             ],
             components: [
-                new MessageActionRow().addComponents(
-                    new MessageSelectMenu()
+                new ActionRowBuilder().addComponents(
+                    new SelectMenuBuilder()
                         .setCustomId(`ReportSubject, ${interaction.member.user.id}, ${interaction.member.user}`)
                         .setPlaceholder('Aucun sujet selectionné')
                         .addOptions([

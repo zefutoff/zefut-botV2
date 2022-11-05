@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
+const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const { log } = require('../../utils/channels.json');
 
 const admin = require('firebase-admin');
@@ -7,8 +7,8 @@ let db = admin.firestore();
 module.exports = {
     name: 'WarnInfo',
     async execute(client, interaction) {
-        const response = new MessageEmbed().setColor('GREEN');
-        const logs = new MessageEmbed().setColor('RED').setTitle('').setTimestamp().setFooter({ text: interaction.member.user.username });
+        const response = new EmbedBuilder().setColor('#57F287');
+        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('test').setTimestamp().setFooter({ text: interaction.member.user.username });
 
         const data = interaction.customId.split(', ');
         const userId = data[1];
@@ -30,11 +30,11 @@ module.exports = {
                 embeds: [
                     response
                         .setTitle(':card_box: Liste des avertissements\n')
-                        .addField(`__Avertissement numéro__`, `**Raison :** ${warn1R} \nLe *${wDate1}* ~ Par *${wDate2}* `)
+                        .addFields([{ name: `__Avertissement numéro__`, value: `**Raison :** ${warn1R} \nLe *${wDate1}* ~ Par *${wDate2}* ` }])
                 ],
                 components: [
-                    new MessageActionRow().addComponents(
-                        new MessageButton().setLabel('Supprimer un avertissement').setStyle('DANGER').setCustomId(`WarnDel, ${userId}, ${user}`)
+                    new ActionRowBuilder().addComponents(
+                        new ButtonBuilder().setLabel('Supprimer un avertissement').setStyle(ButtonStyle.Danger).setCustomId(`WarnDel, ${userId}, ${user}`)
                     )
                 ],
                 ephemeral: true
@@ -42,14 +42,14 @@ module.exports = {
         if (warnNbr == 2)
             interaction.reply({
                 embeds: [
-                    response
-                        .setTitle(':card_box: Liste des avertissements\n')
-                        .addField(`__Avertissement numéro__`, `**Raison :** ${warn1R} \nLe *${wDate1}* ~ Par *${wAuthor1}* `)
-                        .addField(`__Avertissement numéro__`, `**Raison :** ${warn2R}\nLe *${wDate2}* ~ Par *${wAuthor2}* `)
+                    response.setTitle(':card_box: Liste des avertissements\n').addFields([
+                        { name: `__Avertissement numéro__`, value: `**Raison :** ${warn1R} \nLe *${wDate1}* ~ Par *${wAuthor1}* ` },
+                        { name: `__Avertissement numéro__`, value: `**Raison :** ${warn2R}\nLe *${wDate2}* ~ Par *${wAuthor2}* ` }
+                    ])
                 ],
                 components: [
-                    new MessageActionRow().addComponents(
-                        new MessageButton().setLabel('Supprimer un avertissement').setStyle('DANGER').setCustomId(`WarnDel, ${userId}, ${user}`)
+                    new ActionRowBuilder().addComponents(
+                        new ButtonBuilder().setLabel('Supprimer un avertissement').setStyle(ButtonStyle.Danger).setCustomId(`WarnDel, ${userId}, ${user}`)
                     )
                 ],
                 ephemeral: true
