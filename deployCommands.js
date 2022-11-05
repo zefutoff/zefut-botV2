@@ -1,10 +1,10 @@
 const fs = require('fs');
-const { REST } = require('@discordjs/rest');
+const { REST } = require('discord.js');
 const { Routes } = require('discord-api-types/v9');
 const { clientId, guildId, token } = require('./config.json');
 
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
-const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
+//const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
 
 const serviceAccount = require('./serviceAccountKey.json');
 
