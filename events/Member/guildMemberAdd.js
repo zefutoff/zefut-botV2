@@ -30,8 +30,11 @@ module.exports = {
                 roles
             )
             .setTimestamp()
-            .setFooter({ text: 'Ce message nous à été prposer par ' + messages[random].userName });
+            .setFooter({ text: 'Message proposé par ' + messages[random].userName });
 
-        missano.send({ content: `Bienvenue <@${member.user.id}> ! **${messages[random].userName}** m'a demandé de te stransmettre ce message :`, embeds: [msg] });
+        missano.send({
+            content: `Bienvenue <@${member.user.id}> ! **${messages[random].userName}** m'a demandé de te transmettre ce message :`,
+            embeds: [msg]
+        });
     }
 };
