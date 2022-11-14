@@ -1,3 +1,4 @@
+//Faire les logs
 const { EmbedBuilder, ActionRowBuilder, SelectMenuBuilder } = require('discord.js');
 const { log } = require('../../utils/channels.json');
 
@@ -8,7 +9,11 @@ module.exports = {
     name: 'WarnDel',
     async execute(client, interaction) {
         const response = new EmbedBuilder().setColor('#57F287');
-        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('test').setTimestamp().setFooter({ text: interaction.member.user.username });
+        const logs = new EmbedBuilder()
+            .setColor('#ED4245')
+            .setTitle('test')
+            .setTimestamp()
+            .setFooter({ text: interaction.member.user.username });
 
         const data = interaction.customId.split(', ');
         const userId = data[1];

@@ -1,5 +1,7 @@
-const { CommandInteraction, EmbedBuilder, PermissionsBitFieldBitField, SlashCommandBuilder } = require('discord.js');
-const { log, aide1 } = require('../../utils/channels.json');
+//A retravailler car forum mtn
+const { CommandInteraction, EmbedBuilder, PermissionsBitField, SlashCommandBuilder } = require('discord.js');
+const { logs, response, permError } = require('../../utils/embed');
+const { aide1 } = require('../../utils/channels.json');
 const { helper } = require('../../utils/roles.json');
 
 module.exports = {
@@ -13,17 +15,13 @@ module.exports = {
                 .addChoices({ value: `${aide1}`, name: 'Aide-Mcreator' })
                 .setRequired(false)
         ),
-    /**
-     * @param {CommandInteraction} interaction
-     */
+
     async execute(interaction) {
         const { options } = interaction;
 
         const channelId = options.getString('channel');
 
-        const error = new EmbedBuilder().setColor('#ED4245');
-        const logs = new EmbedBuilder().setTitle('/Explain').setTimestamp().setFooter({ text: interaction.member.user.username });
-        const response = new EmbedBuilder()
+        const rsp = new EmbedBuilder()
             .setColor('#57F287')
             .setTitle('__Pour qu’on puisse t’aider au mieux__')
             .setDescription(
@@ -37,21 +35,20 @@ module.exports = {
             **on te répondra pas plus vite**`
             );
 
-        if (!interaction.member.roles.cache.has(helper) && !interaction.member.permissions.has(PermissionsBitFieldBitField.Flags.Administrator))
-            return interaction.reply({
-                embeds: [error.setDescription(`❌ Tu n'as pas les PermissionsBitField requises pour utiliser cette commande !`)],
-                ephemeral: true
-            });
+        if (!interaction.member.roles.cache.has(helper) && !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator))
+            return permError(interaction);
 
         if (!channelId) {
-            interaction.guild.channels.cache.get(aide1).send({ embeds: [response] });
-
-            interaction.guild.channels.cache.get(aide1).send({ embeds: [response] });
+            interaction.guild.channels.cache.get(aide1).send({ embeds: [rsp] });
         } else {
             interaction.guild.channels.cache.get(aide1).send({ embeds: [response] });
         }
 
-        interaction.guild.channels.cache.get(log).send({ embeds: [logs.setDescription(`La commande /explain a été exécutée avec succès !`)] });
-        return interaction.reply({ embeds: [response.setDescription(`✅ La commande a été exécutée avec succès !`)], ephemeral: true });
+        logs(interaction, '/Explain', `La commande /explain a été exécutée avec succès !`);
+
+        return interaction.reply({
+            embeds: [response.setDescription(`✅ La commande a été exécutée avec succès !`)],
+            ephemeral: true
+        });
     }
 };

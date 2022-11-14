@@ -1,21 +1,17 @@
 const { Interaction, EmbedBuilder } = require('discord.js');
 
-const { log } = require('../../utils/channels.json');
+const { logs } = require('../../utils/embed');
 
 module.exports = {
     name: 'interactionCreate',
-    /**
-     *
-     * @param {Interaction} interaction
-     * @returns
-     */
-    async execute(interaction, client) {
-        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('test').setTimestamp().setFooter({ text: interaction.member.user.username });
 
+    async execute(interaction, client) {
         function sendMsgError(object) {
-            interaction.guild.channels.cache.get(log).send({
-                content: `[Dev] - ${object} inconu Une interaction inconu à était reçu : ${interaction.customId}**`
-            });
+            logs(
+                interaction,
+                '[Dev]',
+                `**${object} inconu** - Une interaction inconu à était reçu - ID de l'interaction : **${interaction.customId}**`
+            );
         }
 
         if (interaction.isCommand()) {
@@ -33,7 +29,7 @@ module.exports = {
 
         if (interaction.isButton()) {
             const btn = interaction.client.buttons.get(interaction.customId.substring(0, interaction.customId.indexOf(',')));
-            if (!btn) return sendMsgError('boutton');
+            if (!btn) return sendMsgError('Boutton');
             btn.execute(client, interaction);
         }
 

@@ -1,4 +1,5 @@
 const { PermissionsBitField, EmbedBuilder, CommandInteraction, User, SlashCommandBuilder } = require('discord.js');
+const { permError, error, logs, response } = require('../../utils/embed');
 const { log } = require('../../utils/channels.json');
 
 module.exports = {
@@ -15,57 +16,36 @@ module.exports = {
             subcommand
                 .setName('user')
                 .setDescription('Renommer un utilisateur')
-                .addUserOption(option => option.setName('user').setDescription("Utilisateur concerné par la demande d'information").setRequired(true))
+                .addUserOption(option =>
+                    option.setName('user').setDescription("Utilisateur concerné par la demande d'information").setRequired(true)
+                )
                 .addStringOption(option => option.setName('username').setDescription("Nouveau nom d'utilisateur").setRequired(true))
         ),
-
-    /**
-     * @param {CommandInteraction} interaction
-     * @returns
-     */
 
     async execute(interaction) {
         const { options } = interaction;
 
-        const error = new EmbedBuilder().setColor('#ED4245');
-        const response = new EmbedBuilder().setColor('#57F287');
-        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('Message clear').setTimestamp().setFooter({ text: interaction.member.user.username });
-
         const Username = options.getString('username');
 
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageNicknames)) {
-            return interaction.reply({
-                embeds: [error.setDescription(`❌ Tu n'as pas les PermissionsBitField requises pour utiliser cette commande !`)],
-                ephemeral: true
-            });
+            return permError(interaction);
         }
 
         if (Username.length > 32) {
-            return interaction.reply({
-                embeds: [error.setDescription(`❌ Les pseudos ne peuvent pas dépasser 32 caractères (Ta proposition contient **${Username.length} caractères**)`)],
-                ephemeral: true
-            });
+            return error(
+                interaction,
+                `❌ Les pseudos ne peuvent pas dépasser 32 caractères (Ta proposition contient **${Username.length} caractères**)`
+            );
         }
 
         if (options.getSubcommand() === 'all') {
             interaction.guild.members.cache.forEach(r =>
-                r
-                    .setNickname(Username)
-                    .catch(e =>
-                        interaction.guild.channels.cache
-                            .get(log)
-                            .send({ embeds: [logs.setTitle('[Dev] - ERROR').setDescription(`Je ne parviens pas à renommer ${r.user}\n \`${e}\``)], ephemeral: true })
-                    )
+                r.setNickname(Username).catch(e => logs(interaction, '[Dev] - ERROR', `Je ne parviens pas à renommer ${r.user}\n \`${e}\``))
             );
 
-            interaction.guild.channels.cache
-                .get(log)
-                .send({ embeds: [logs.setDescription(`**${interaction.user} à renommer tous les membres du serveur**`)], ephemeral: true });
+            logs(interaction, 'Membre renommé', `**${interaction.user} à renommer tous les membres du serveur**`);
 
-            return interaction.reply({
-                embeds: [response.setDescription(`✅ Tous les membres on étaient renommés en **${Username}**`)],
-                ephemeral: true
-            });
+            return response(interaction, `✅ Tous les membres on étaient renommés en **${Username}**`);
         }
 
         if (options.getSubcommand() === 'user') {
@@ -74,18 +54,11 @@ module.exports = {
             interaction.guild.members.cache
                 .get(User.id)
                 .setNickname(Username)
-                .catch(e =>
-                    interaction.guild.channels.cache
-                        .get(log)
-                        .send({ embeds: [logs.setTitle('[Dev] - ERROR').setDescription(`Je ne parviens pas à renommer ${r.user}\n \`${e}\``)], ephemeral: true })
-                );
+                .catch(e => logs(interaction, '[Dev] - ERROR', `Je ne parviens pas à renommer ${r.user}\n \`${e}\``));
 
-            interaction.guild.channels.cache.get(log).send({ embeds: [logs.setDescription(`**${interaction.user} à renommé ${User.user}**`)], ephemeral: true });
+            logs(interaction, 'Membre renommé', `**${interaction.user} à renommé ${User.user}**`);
 
-            return interaction.reply({
-                embeds: [response.setDescription(`✅ ${User.user.tag} à était renommé !`)],
-                ephemeral: true
-            });
+            return response(interaction, `✅ ${User.user.tag} à était renommé !`);
         }
     }
 };

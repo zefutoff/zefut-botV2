@@ -1,15 +1,27 @@
-const { PermissionsBitField, EmbedBuilder, CommandInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
+const {
+    PermissionsBitField,
+    EmbedBuilder,
+    CommandInteraction,
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    SlashCommandBuilder
+} = require('discord.js');
+const { permError, logs } = require('../../utils/embed');
 const { log } = require('../../utils/channels.json');
 const moment = require('moment');
 
 const admin = require('firebase-admin');
+
 let db = admin.firestore();
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('info')
         .setDescription("Permet d'obtenir des informations sur un utilisateur")
-        .addUserOption(option => option.setName('user').setDescription("Utilisateur concerné par la demande d'information").setRequired(true)),
+        .addUserOption(option =>
+            option.setName('user').setDescription("Utilisateur concerné par la demande d'information").setRequired(true)
+        ),
 
     /**
      * @param {CommandInteraction} interaction
@@ -20,11 +32,8 @@ module.exports = {
         const { options } = interaction;
 
         const User = options.getMember('user');
-        const error = new EmbedBuilder().setColor('#ED4245');
 
         var warnNbr = 0;
-
-        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('Commande info').setTimestamp().setFooter({ text: interaction.member.user.username });
 
         const warn = db.collection('warn').doc(User.id);
         const doc = await warn.get();
@@ -52,10 +61,7 @@ module.exports = {
             .setTimestamp();
 
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) {
-            return interaction.reply({
-                embeds: [error.setDescription(`❌ Tu n'as pas les PermissionsBitField requises pour utiliser cette commande !`)],
-                ephemeral: true
-            });
+            return permError(interaction);
         }
 
         if (warnNbr === 0) {
@@ -63,8 +69,9 @@ module.exports = {
                 embeds: [
                     response.setFooter({
                         text:
-                            `Une copie de ces infortmations on étaient envoyés dans le salon ${interaction.guild.channels.cache.get(log).name}\n ` +
-                            interaction.member.user.username
+                            `Une copie de ces infortmations on étaient envoyés dans le salon ${
+                                interaction.guild.channels.cache.get(log).name
+                            }\n ` + interaction.member.user.username
                     })
                 ],
                 ephemeral: true
@@ -74,13 +81,17 @@ module.exports = {
             embeds: [
                 response.setFooter({
                     text:
-                        `Une copie de ces infortmations on étaient envoyés dans le salon ${interaction.guild.channels.cache.get(log).name}\n ` +
-                        interaction.member.user.username
+                        `Une copie de ces infortmations on étaient envoyés dans le salon ${
+                            interaction.guild.channels.cache.get(log).name
+                        }\n ` + interaction.member.user.username
                 })
             ],
             components: [
                 new ActionRowBuilder().addComponents(
-                    new ButtonBuilder().setLabel('Voir les avertissements').setStyle(ButtonStyle.Primary).setCustomId(`WarnInfo, ${User.id}, ${User}`)
+                    new ButtonBuilder()
+                        .setLabel('Voir les avertissements')
+                        .setStyle(ButtonStyle.Primary)
+                        .setCustomId(`WarnInfo, ${User.id}, ${User}`)
                 )
             ],
             ephemeral: true
