@@ -1,4 +1,13 @@
-const { PermissionsBitField, EmbedBuilder, CommandInteraction, ButtonBuilder, ActionRowBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
+const {
+    PermissionsBitField,
+    EmbedBuilder,
+    CommandInteraction,
+    ButtonBuilder,
+    ActionRowBuilder,
+    ButtonStyle,
+    SlashCommandBuilder
+} = require('discord.js');
+const { permError, error, response, rspButton, logs } = require('../../utils/embed');
 const { log } = require('../../utils/channels.json');
 
 const admin = require('firebase-admin');
@@ -14,20 +23,11 @@ module.exports = {
         .addUserOption(option => option.setName('user').setDescription('Utilisateur à avertir').setRequired(true))
         .addStringOption(option => option.setName('reason').setDescription("Description de l'avertissement").setRequired(true)),
 
-    /**
-     * @param {CommandInteraction} interaction
-     * @returns
-     */
-
     async execute(interaction) {
         const { options } = interaction;
 
         const user = options.getMember('user');
         const reason = options.getString('reason');
-
-        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('Utilisateur averti').setTimestamp().setFooter({ text: interaction.member.user.username });
-        const response = new EmbedBuilder().setColor('#57F287');
-        const error = new EmbedBuilder().setColor('#ED4245');
 
         const warn = db.collection('warn').doc(user.id);
         const doc = await warn.get();
@@ -35,14 +35,14 @@ module.exports = {
         const d = new Date();
 
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) {
-            return interaction.reply({
-                embeds: [error.setDescription(`❌ Tu n'as pas les PermissionsBitField requises pour utiliser cette commande !`)],
-                ephemeral: true
-            });
+            return permError(interaction);
         }
 
-        if (user.permissions.has(PermissionsBitField.Flags.BanMembers) && !interaction.member.PermissionsBitField.has(PermissionsBitField.Flags.Administrator)) {
-            return interaction.reply({ embeds: [error.setDescription(`❌ Tu ne peux pas warn ${user}`)], ephemeral: true });
+        if (
+            user.permissions.has(PermissionsBitField.Flags.BanMembers) &&
+            !interaction.member.PermissionsBitField.has(PermissionsBitField.Flags.Administrator)
+        ) {
+            return error(interaction, `❌ Tu ne peux pas warn ${user}`);
         }
 
         if (!doc.exists) {
@@ -61,14 +61,13 @@ module.exports = {
             };
             warn.set(data);
 
-            interaction.reply({
-                embeds: [response.setDescription(`✅ **${user} a été warn pour la raison suivante** : ${reason} \n **Nombre de warn : 1**`)],
-                ephemeral: true
-            });
+            response(interaction, `✅ **${user} a été warn pour la raison suivante** : ${reason} \n **Nombre de warn : 1**`);
 
-            interaction.guild.channels.cache.get(log).send({
-                embeds: [logs.setDescription(`${user} **a été averti pour la raison suivante** : ${reason} \n Il en est à son 1er warn`)]
-            });
+            logs(
+                interaction,
+                'Utilisateur averti',
+                `${user} **a été averti pour la raison suivante** : ${reason} \n Il en est à son 1er warn`
+            );
         } else {
             const warn_number = doc._fieldsProto.numberWarn.integerValue;
 
@@ -81,29 +80,27 @@ module.exports = {
                 };
                 warn.update(dataUpdate);
 
-                interaction.reply({
-                    embeds: [response.setDescription(`✅ **${user} a été warn pour la raison suivante** : ${reason} \n **Nombre de warn : 2**`)],
-                    ephemeral: true
-                });
+                response(interaction, `✅ **${user} a été warn pour la raison suivante** : ${reason} \n **Nombre de warn : 2**`);
 
-                interaction.guild.channels.cache.get(log).send({
-                    embeds: [logs.setDescription(`${user} **a été averti pour la raison suivante** : ${reason} \n Il en est à son 2eme warn`)]
-                });
+                logs(
+                    interaction,
+                    'Utilisateur averti',
+                    `${user} **a été averti pour la raison suivante** : ${reason} \n Il en est à son 2eme warn`
+                );
             }
 
             if (warn_number === '2') {
-                interaction.reply({
-                    embeds: [
-                        response.setDescription(`${user} comptabilise dejà 2 warn ce qui veut dire qu'il va être bannis, confirme tu la sanction ? `).setColor('ORANGE')
-                    ],
-                    components: [
-                        new ActionRowBuilder().addComponents(
-                            new ButtonBuilder().setLabel('CONFIRMER').setStyle('SUCCESS').setCustomId(`AddWarn, ${user.id}, ${user}, ${reason}`),
-                            new ButtonBuilder().setLabel('ANNULER').setStyle(ButtonStyle.Danger).setCustomId('False')
-                        )
-                    ],
-                    ephemeral: true
-                });
+                rspButton(
+                    interaction,
+                    `${user} comptabilise dejà 2 warn ce qui veut dire qu'il va être bannis, confirme tu la sanction ? `,
+                    new ActionRowBuilder().addComponents(
+                        new ButtonBuilder()
+                            .setLabel('CONFIRMER')
+                            .setStyle(ButtonStyle.Success)
+                            .setCustomId(`AddWarn, ${user.id}, ${user}, ${reason}`),
+                        new ButtonBuilder().setLabel('ANNULER').setStyle(ButtonStyle.Danger).setCustomId('False')
+                    )
+                );
             }
         }
     }

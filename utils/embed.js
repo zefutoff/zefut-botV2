@@ -15,6 +15,14 @@ function response(interaction, description) {
     });
 }
 
+function rspButton(interaction, description, button) {
+    return interaction.reply({
+        embeds: [new EmbedBuilder().setColor('#57F287').setDescription(description)],
+        components: [button],
+        ephemeral: true
+    });
+}
+
 function permError(interaction) {
     return interaction.reply({
         embeds: [
@@ -37,4 +45,4 @@ function logs(interaction, title, description) {
     });
 }
 
-module.exports = { permError, logs, error, response };
+module.exports = { permError, logs, error, response, rspButton };
