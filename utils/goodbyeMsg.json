@@ -1,0 +1,177 @@
+{
+    "_comment": "%username% --> Nom de l'utilisateur | %rules% --> Salon du réglement | %roles% --> Salon des roles",
+    "messages": [
+        {
+            "sentence": "Oh nooon !! %username% à malencontreusement appuyer sur le bouton **quitter le serveur** ! Zefut'industries saura lui pardonner cette erreur...",
+            "userName": "Silver_Polnareff"
+        },
+        {
+            "sentence": "%username% was killed by [Intentional Game Design]",
+            "userName": "Mazeriio"
+        },
+        {
+            "sentence": "/kill %username%",
+            "userName": "PRODR"
+        },
+        {
+            "sentence": "%username% a lttéralement quitter notre monde",
+            "userName": "Mika le lego"
+        },
+        {
+            "sentence": "%username% vient de nous quitter, GO le mp avec le lien ici pour qu'il revienne !!!",
+            "userName": "Nardann"
+        },
+        {
+            "sentence": "%username% est tombé de l'Aether. Il reviendra peut-être après cette merveilleuse publicité Coca-Cola, car il n'a pas retrouvé le portail. (Pour l'instant) !",
+            "userName": "Aethyus"
+        },
+        {
+            "sentence": "%username% left the game",
+            "userName": "EnderChamsV2"
+        },
+        {
+            "sentence": "%username% a quitté la partie",
+            "userName": "EnderChamsV2"
+        },
+        {
+            "sentence": "%username% a quitté et c'est fait zéffuté",
+            "userName": "ylaninosleboss"
+        },
+        {
+            "sentence": "%username% et partis du mon de zefut",
+            "userName": "ylaninosleboss"
+        },
+        {
+            "sentence": "le coeur de %username% c'est arréter car MCréator trop dure pour lui.",
+            "userName": "ylaninosleboss"
+        },
+        {
+            "sentence": "%username% attend toujours l'ebook",
+            "userName": "Obstinate"
+        },
+        {
+            "sentence": "%username% Fatal error",
+            "userName": "MrMuguet"
+        },
+        {
+            "sentence": "%username% was killed by [Quit Server Button]",
+            "userName": "TheFrenchTechMan "
+        },
+        {
+            "sentence": "%username% est enfin parti, quelle réjouissance !",
+            "userName": "⟨⟨  Tiramisu  ⟩⟩"
+        },
+        {
+            "sentence": "%username% à pris un Airbus 2000",
+            "userName": "BSS | elyss2008"
+        },
+        {
+            "sentence": "%username% n'avait plus envie de traîner avec des personnes intelligentes !",
+            "userName": "RecStone"
+        },
+        {
+            "sentence": "%username% a pris un avion pour la Chine. On ne le reverra pas de si tôt...",
+            "userName": "Blusowka"
+        },
+        {
+            "sentence": "%username% n'a pas supporter la cruauté du roi Zefut",
+            "userName": "Soded_"
+        },
+        {
+            "sentence": "%username%, la tribu de zefut a décidé de vous éliminer et la sentence est irrévocable",
+            "userName": "SaYZoX 93"
+        },
+        {
+            "sentence": "%username% n'a pas résister au talent de modding des joueurs",
+            "userName": "Xordas"
+        },
+        {
+            "sentence": "%username% a dû se tromper de bouton...",
+            "userName": "Astratus"
+        },
+        {
+            "sentence": "%username% avait une connexion pourrie.",
+            "userName": "Evan G"
+        },
+        {
+            "sentence": "Attendez ! C'est bien %username% au loin ? Oups il me semble bien, au revoir ... Et paf ! %username% c'est pris un cycliste.",
+            "userName": "Ar2ino"
+        },
+        {
+            "sentence": "%username% a oublié de regarder au dessus de sa tête... L'enclume est tombée.",
+            "userName": "FirstMegaGame"
+        },
+        {
+            "sentence": "%username% a fait une chute en quittant le serveur",
+            "userName": "Maxtrap05"
+        },
+        {
+            "sentence": "%username% a confondu Zefut avec Fuze",
+            "userName": "Blusowka"
+        },
+        {
+            "sentence": "%username% a passé la frontière de la corée du nord",
+            "userName": "⟨⟨ Tiramisu ⟩⟩"
+        },
+        {
+            "sentence": "%username% a fais un infractus",
+            "userName": "SaYZoX 93"
+        },
+        {
+            "sentence": "%username% a perdu le Squid Game",
+            "userName": "Player Max = new Steve();"
+        },
+        {
+            "sentence": "%username% s'est fait ratio",
+            "userName": "Player Max = new Steve();"
+        },
+        {
+            "sentence": "%username% a rage-quit",
+            "userName": "Silver_Polnareff"
+        },
+        {
+            "sentence": "%username% a perdu le goût de vivre sainement",
+            "userName": "Trophonios"
+        },
+        {
+            "sentence": "%username% a percuté une météorite. ",
+            "userName": "FirstMegaGame"
+        },
+        {
+            "sentence": "%username% a fuguer",
+            "userName": "SaYZoX 93"
+        },
+        {
+            "sentence": "%username% s'est enfuit, il ne faut pas avoir peur",
+            "userName": "Blusowka"
+        },
+        {
+            "sentence": "%username% a perdu ses codes discord",
+            "userName": "Trophonios"
+        },
+        {
+            "sentence": "La Zefut Industries a remarqué que %username% avait un AdBlocker.",
+            "userName": "FirstMegaGame"
+        },
+        {
+            "sentence": "%username% est parti chercher du lait...",
+            "userName": "yochisecur"
+        },
+        {
+            "sentence": "%username% utilisait MCreator 1.12.2... ",
+            "userName": "TATHAN"
+        },
+        {
+            "sentence": "%username% est aller acheter des clop",
+            "userName": "Dr-Fox999"
+        },
+        {
+            "sentence": "%username% est partie dans les backrooms",
+            "userName": "Xordas"
+        },
+        {
+            "sentence": "%username% n'a pas survécu au POUVOIR DE L'AMITIÉ !!!",
+            "userName": "Xordas"
+        }
+    ]
+}

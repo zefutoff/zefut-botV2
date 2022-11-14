@@ -1,0 +1,20 @@
+{
+    "_comment": "admin --> administrateur | ban --> Manager les membres | message --> Manager les messages, none --> aucune exclusion | %username% --> Nom de l'utilisateur",
+    "bannedVersions": [
+        {
+            "version": "1.14",
+            "exlued": "%message%",
+            "response": "%username% nous aidons uniquement sur les dernières version pris en charge par Mcreator, la 1.14.x n'en fait pas partie ! Nous t'invitons à mettre à jour ton mod."
+        },
+        {
+            "version": "1.12",
+            "exlued": ["%message%"],
+            "response": "%username% nous aidons uniquement sur les dernières version pris en charge par Mcreator, la 1.12.x n'en fait pas partie ! Nous t'invitons à mettre à jour ton mod."
+        },
+        {
+            "version": "1.8",
+            "exlued": "%message%",
+            "response": "%username% nous aidons uniquement sur les dernières version pris en charge par Mcreator, la 1.8.x n'en fait pas partie ! Nous t'invitons à mettre à jour ton mod."
+        }
+    ]
+}

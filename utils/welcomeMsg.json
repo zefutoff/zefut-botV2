@@ -1,0 +1,65 @@
+{
+    "_comment": "%username% --> Nom de l'utilisateur | %rules% --> Salon du réglement | %roles% --> Salon des roles",
+    "messages": [
+        {
+            "sentence": "Wesh %username% bienvenue sur le camp **Zefut** prépare toi à souffrir :smiling_imp:",
+            "userName": "Rockstars772"
+        },
+        {
+            "sentence": "Bonjour, %username% j'espère que tu va bien \n Si c'est pas le cas je suis pas un docteur, je m'en bat les Corona :health_worker:",
+            "userName": "YT_SaYZoX_93"
+        },
+        {
+            "sentence": "Un %username% sauvage est apparu ! :eyes:",
+            "userName": "The Shinoby"
+        },
+        {
+            "sentence": "Cc %username% si tu ne connais pas les règles ne va pas voir dans %rules%,\n c'est long et chiant.\n \n **__Ici il n'y a que 3 règles__ :**\n \n :one: On parle de tout sauf de mcreator\n :two: Utilise @everyone dès que tu le peux\n :three: N'hésite pas à ping les modos avec un :middle_finger:  ||Sauf Netiix il peut MORDRE|| \n \n **J'ai peut être dis l'inverse de ce qu'il fallait faire :thinking:**",
+            "userName": "Le_Survivants"
+        },
+        {
+            "sentence": "Bonjour %username%, et bienvenue dans le monde merveilleux de... Poké'Zef ! :confetti_ball: ",
+            "userName": "Max Inc."
+        },
+        {
+            "sentence": "Allô esclav... Euh %username% !",
+            "userName": "monsieur gastou"
+        },
+        {
+            "sentence": "Bienvenue %username% sur le serveur communautaire du grand Zefut !\n \n Nous t'invitons à lire attentivement le %rules% pour éviter toutes sanctions, en espérant que tu passera un bon temps parmi nous !",
+            "userName": "a S p o o k y"
+        },
+        {
+            "sentence": "**Heyyyyyy salutàTousLesAmiiiis c'est ZefutIndustriesSurMcreatooor !\n \n Et on te souhaite la bienvenue à %username% avec Miss Zefutée !**",
+            "userName": "Blusowka"
+        },
+        {
+            "sentence": "Salut a toi %username% !\n \n Si tu as un N dans ton pseudo tu gagnes un nitro payé par Zefut ! Et si tu as un B tu es ban ! Cool non ?\n \n ***Zefut est en train d'écrir...***",
+            "userName": "NetiiX_"
+        },
+        {
+            "sentence": "Salut %username% tu viens surement de faire la pire erreur de ta vie en rejoignant ce serv mais c'est cool ! \n \nN'hésite pas a prendre ton role dans %roles% (perspicace)\n \n||~~n'hésite pas a ping Zefut et Merlin ils adorent ça.~~||",
+            "userName": "NetiiX_"
+        },
+        {
+            "sentence": "Soit le bienvenu très cher %username% dans la puissante zefut'industries !\n \n Ici toute les techniques pour se faire beaucoup d'argent, rapidement et sans sortir de chez toi te seront révélées ! :money_mouth:",
+            "userName": "La meilleure tout simplement"
+        },
+        {
+            "sentence": "Bienvenue sur notre serveur %username% !\n \n Tu es venu ici c'est pour obtenir de l'aide ou pour discuter avec la communauté ?\n Le staff t'invite donc aller choisir tes %roles% et lire le %rules% ! ",
+            "userName": "La meilleure tout simplement"
+        },
+        {
+            "sentence": "Bienvenue dans la :smiling_imp: Zefut sekt :smiling_imp:, jeune %username% :metal:",
+            "userName": "Dᐰmien_"
+        },
+        {
+            "sentence": "Quel est ce Pokémon ? :thinking:\n \n C’eeeeeeeessst... %username% !\n \n :robot: - ***%username% à été rajouté à votre Pokedex.***\n",
+            "userName": "Rayckou "
+        },
+        {
+            "sentence": "Ho te voila %username%, les helpers ont du soucis à ce faire :smirk:",
+            "userName": "Dr-Fox999"
+        }
+    ]
+}
