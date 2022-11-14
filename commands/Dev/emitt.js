@@ -1,4 +1,5 @@
-const { CommandInteraction, Client, SlashCommandBuilder } = require('discord.js');
+const { CommandInteraction, Client, SlashCommandBuilder, PermissionsBitField } = require('discord.js');
+const { permError } = require('../../utils/embed');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,14 +15,10 @@ module.exports = {
                 .setRequired(true)
         ),
 
-    /**
-     *
-     * @param {CommandInteraction} interaction
-     * @param {Client} client
-     */
-
     async execute(interaction, client) {
         const choices = interaction.options.getString('command');
+
+        if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return permError(interaction);
 
         switch (choices) {
             case 'guildMemberAdd':
