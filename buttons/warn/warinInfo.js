@@ -1,5 +1,5 @@
-const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
-const { response, logs } = require('../../utils/embed');
+const { ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
+const { rspComponents, logs } = require('../../utils/embed');
 
 const admin = require('firebase-admin');
 let db = admin.firestore();
@@ -7,8 +7,6 @@ let db = admin.firestore();
 module.exports = {
     name: 'WarnInfo',
     async execute(client, interaction) {
-        const response = new EmbedBuilder().setColor('#57F287');
-
         const data = interaction.customId.split(', ');
         const userId = data[1];
         const user = data[2];
@@ -25,42 +23,31 @@ module.exports = {
         const warnNbr = doc._fieldsProto.numberWarn.integerValue;
 
         if (warnNbr == 1)
-            interaction.reply({
-                embeds: [
-                    response
-                        .setTitle(':card_box: Liste des avertissements\n')
-                        .addFields([
-                            { name: `__Avertissement numéro__ 1`, value: `**Raison :** ${warn1R} \nLe *${wDate1}* ~ Par *${wAuthor1}* ` }
-                        ])
-                ],
-                components: [
-                    new ActionRowBuilder().addComponents(
-                        new ButtonBuilder()
-                            .setLabel('Supprimer un avertissement')
-                            .setStyle(ButtonStyle.Danger)
-                            .setCustomId(`WarnDel, ${userId}, ${user}`)
-                    )
-                ],
-                ephemeral: true
-            });
+            rspComponents(
+                interaction,
+                ':card_box: Liste des avertissements\n',
+                `__Avertissement numéro__ 1\n **Raison :** ${warn1R} \nLe *${wDate1}* ~ Par *${wAuthor1}*`,
+                new ActionRowBuilder().addComponents(
+                    new ButtonBuilder()
+                        .setLabel('Supprimer un avertissement')
+                        .setStyle(ButtonStyle.Danger)
+                        .setCustomId(`WarnDel, ${userId}, ${user}`)
+                )
+            );
+
         if (warnNbr == 2)
-            interaction.reply({
-                embeds: [
-                    response.setTitle(':card_box: Liste des avertissements\n').addFields([
-                        { name: `__Avertissement numéro__ 1`, value: `**Raison :** ${warn1R} \nLe *${wDate1}* ~ Par *${wAuthor1}* ` },
-                        { name: `__Avertissement numéro__ 2`, value: `**Raison :** ${warn2R}\nLe *${wDate2}* ~ Par *${wAuthor2}* ` }
-                    ])
-                ],
-                components: [
-                    new ActionRowBuilder().addComponents(
-                        new ButtonBuilder()
-                            .setLabel('Supprimer un avertissement')
-                            .setStyle(ButtonStyle.Danger)
-                            .setCustomId(`WarnDel, ${userId}, ${user}`)
-                    )
-                ],
-                ephemeral: true
-            });
+            rspComponents(
+                interaction,
+                ':card_box: Liste des avertissements\n',
+                `__Avertissement numéro__ 1\n **Raison :** ${warn1R} \nLe *${wDate1}* ~ Par *${wAuthor1}*\n
+                        __Avertissement numéro__ 2\n **Raison :** ${warn2R}\nLe *${wDate2}* ~ Par *${wAuthor2}*`,
+                new ActionRowBuilder().addComponents(
+                    new ButtonBuilder()
+                        .setLabel('Supprimer un avertissement')
+                        .setStyle(ButtonStyle.Danger)
+                        .setCustomId(`WarnDel, ${userId}, ${user}`)
+                )
+            );
 
         logs(interaction, 'Information sur les avertissements', `Les avertissements de ${user} on étaient listés.`);
     }

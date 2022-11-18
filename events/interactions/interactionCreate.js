@@ -1,4 +1,4 @@
-const { Interaction, EmbedBuilder } = require('discord.js');
+const { Interaction } = require('discord.js');
 
 const { logs } = require('../../utils/embed');
 

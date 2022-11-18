@@ -1,7 +1,7 @@
-const { TextInputBuilder, Client, EmbedBuilder, ModalBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
+const { TextInputBuilder, Client, ModalBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
 const { showModal } = require('discord-modals'); //A verifier
+const { rspModal, sendModal } = require('../../utils/embed');
 const { token } = require('../../config.json');
-const { administrator } = require('../../utils/channels.json');
 
 const clientModal = new Client({ intents: 32767 });
 const discordModals = require('discord-modals');
@@ -23,80 +23,49 @@ module.exports = {
             )
         );
 
+        function show(title, id) {
+            interaction.showModal(modal.setTitle(title).setCustomId(id), {
+                client: clientModal,
+                interaction: interaction
+            });
+        }
+
         if (interaction.values.includes('sanction_report')) {
-            interaction.showModal(modal.setTitle("Contestation d'une santcion").setCustomId('sanction_report'), {
-                client: clientModal,
-                interaction: interaction
-            });
+            show("Contestation d'une santcion", 'sanction_report');
         }
+
         if (interaction.values.includes('bug_report')) {
-            interaction.showModal(modal.setTitle('Rapporter un bug').setCustomId('bug_report'), {
-                client: clientModal,
-                interaction: interaction
-            });
+            show('Rapporter un bug', 'bug_report');
         }
+
         if (interaction.values.includes('moderator_report')) {
-            interaction.showModal(modal.setTitle('Litige avec un modérateur').setCustomId('moderator_report'), {
-                client: clientModal,
-                interaction: interaction
-            });
+            show('Litige avec un modérateur', 'moderator_report');
         }
+
         if (interaction.values.includes('administrator_report')) {
-            interaction.showModal(modal.setTitle('Litige avec un administrateur').setCustomId('administrator_report'), {
-                client: clientModal,
-                interaction: interaction
-            });
+            show('Litige avec un administrateur', 'administrator_report');
         }
     }
 };
 
 clientModal.on('modalSubmit', modal => {
-    console.log('is modal !');
-    const report = new EmbedBuilder().setTimestamp().setFooter({ text: modal.member.user.username });
-    const response = new EmbedBuilder().setColor('#57F287');
     if (modal.customId === 'sanction_report') {
-        console.log('is sanction !');
-        modal.guild.channels.cache.get(administrator).send({
-            embeds: [report.setTitle(`${modal.member.user.username} conteste une sanction`).setDescription(modal.fields[0].value)]
-        });
-        modal.reply({
-            embeds: [response.setDescription(`✅ ta demande à était transmise aux administrateurs !`)],
-            ephemeral: true
-        });
+        sendModal(modal, ` conteste une sanction`);
+        rspModal(modal, 'administrateurs');
     }
+
     if (modal.customId === 'bug_report') {
-        modal.guild.channels.cache.get(administrator).send({
-            embeds: [report.setTitle(`${modal.member.user.username} à trouver un bug`).setDescription(modal.fields[0].value)]
-        });
-        modal.reply({
-            embeds: [response.setDescription(`✅ ta demande à était transmise aux administrateurs !`)],
-            ephemeral: true
-        });
+        sendModal(modal, ` à trouver un bug`);
+        rspModal(modal, 'aux administrateurs');
     }
+
     if (modal.customId === 'moderator_report') {
-        modal.guild.channels.cache.get(administrator).send({
-            embeds: [
-                report
-                    .setTitle(`${modal.member.user.username} rencontre un problème avec un modérateur`)
-                    .setDescription(modal.fields[0].value)
-            ]
-        });
-        modal.reply({
-            embeds: [response.setDescription(`✅ ta demande à était transmise aux administrateurs !`)],
-            ephemeral: true
-        });
+        sendModal(modal, ` rencontre un problème avec un modérateur`);
+        rspModal(modal, 'aux administrateurs');
     }
+
     if (modal.customId === 'administrator_report') {
-        modal.guild.members.cache.get('386931324042084354').send({
-            embeds: [
-                report
-                    .setTitle(`${modal.member.user.username} rencontre un problème avec un administrateur`)
-                    .setDescription(modal.fields[0].value)
-            ]
-        });
-        modal.reply({
-            embeds: [response.setDescription(`✅ ta demande à était transmise à Zefut !`)],
-            ephemeral: true
-        });
+        sendModal(modal, ` rencontre un problème avec un administrateur`);
+        rspModal(modal, 'à Zefut');
     }
 });

@@ -1,5 +1,5 @@
-const { EmbedBuilder } = require('discord.js');
-const { log } = require('../../utils/channels.json');
+const {} = require('discord.js');
+const { logs, response } = require('../../utils/embed');
 
 const admin = require('firebase-admin');
 let db = admin.firestore();
@@ -7,9 +7,6 @@ let db = admin.firestore();
 module.exports = {
     name: 'WarnChooseDelete',
     async execute(client, interaction) {
-        const response = new EmbedBuilder().setColor('#57F287');
-        const logs = new EmbedBuilder().setColor('#ED4245').setTitle('test').setTimestamp().setFooter({ text: interaction.member.user.username });
-
         const data = interaction.customId.split(', ');
         const userId = data[1];
         const user = data[2];
@@ -21,14 +18,10 @@ module.exports = {
         if (interaction.values.includes('first_warn')) {
             if (warnNbr == 1) {
                 await db.collection('warn').doc(userId).delete();
-                interaction.reply({
-                    embeds: [response.setDescription(`✅ Le warn de ${user} à était supprimé.`)],
-                    ephemeral: true
-                });
 
-                interaction.guild.channels.cache.get(log).send({
-                    embeds: [logs.setTitle('Avertissement supprimé').setDescription(`L'avertissement de ${user} à était supprimés.`)]
-                });
+                response(interaction, `✅ Le warn de ${user} à était supprimé.`);
+
+                logs(interaction, 'Avertissement supprimé', `L'avertissement de ${user} à était supprimés.`);
             }
 
             if (warnNbr == 2) {
@@ -43,14 +36,9 @@ module.exports = {
                 };
                 warn.update(dataUpdate);
 
-                interaction.reply({
-                    embeds: [response.setDescription(`✅ Le warn de ${user} à était supprimé.`)],
-                    ephemeral: true
-                });
+                response(interaction, `✅ Le warn de ${user} à était supprimé.`);
 
-                interaction.guild.channels.cache.get(log).send({
-                    embeds: [logs.setTitle('Avertissement supprimé').setDescription(`L'avertissement de ${user} à était supprimés.`)]
-                });
+                logs(interaction, 'Avertissement supprimé', `L'avertissement de ${user} à était supprimés.`);
             }
         }
         if (interaction.values.includes('seconde_warn')) {
@@ -63,21 +51,13 @@ module.exports = {
                 };
                 warn.update(dataUpdate);
 
-                interaction.reply({
-                    embeds: [response.setDescription(`✅ L'avrtissement de ${user} à était supprimé.`)],
-                    ephemeral: true
-                });
+                response(interaction, `✅ L'avrtissement de ${user} à était supprimé.`);
 
-                interaction.guild.channels.cache.get(log).send({
-                    embeds: [logs.setTitle('Avertissement supprimé').setDescription(`L'avertissement de ${user} à était supprimés.`)]
-                });
+                logs(interaction, 'Avertissement supprimé', `L'avertissement de ${user} à était supprimés.`);
             }
 
             if (warnNbr < 2) {
-                interaction.reply({
-                    embeds: [error.setDescription(`✅ ${user} ne totalise pas 2 avertisseme,t.`)],
-                    ephemeral: true
-                });
+                response(interaction, `✅ ${user} ne totalise pas 2 avertissement.`);
             }
         }
     }

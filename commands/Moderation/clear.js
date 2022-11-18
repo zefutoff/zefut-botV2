@@ -1,4 +1,4 @@
-const { PermissionsBitField, EmbedBuilder, CommandInteraction, SlashCommandBuilder } = require('discord.js');
+const { PermissionsBitField, CommandInteraction, SlashCommandBuilder } = require('discord.js');
 const { permError, logs, error, response } = require('../../utils/embed');
 const { log } = require('../../utils/channels.json');
 

@@ -1,6 +1,6 @@
 //Faire les logs
-const { EmbedBuilder, ActionRowBuilder, SelectMenuBuilder } = require('discord.js');
-const { logs } = require('../../utils/embed');
+const { ActionRowBuilder, SelectMenuBuilder } = require('discord.js');
+const { logs, response, rspComponents } = require('../../utils/embed');
 
 const admin = require('firebase-admin');
 let db = admin.firestore();
@@ -8,8 +8,6 @@ let db = admin.firestore();
 module.exports = {
     name: 'WarnDel',
     async execute(client, interaction) {
-        const response = new EmbedBuilder().setColor('#57F287');
-
         const data = interaction.customId.split(', ');
         const userId = data[1];
         const user = data[2];
@@ -24,38 +22,34 @@ module.exports = {
 
         if (warnNbr == 1) {
             await db.collection('warn').doc(userId).delete();
-            interaction.reply({
-                embeds: [response.setDescription(`✅ Le warn de ${user} à était supprimé.`)],
-                ephemeral: true
-            });
+            response(interaction, `✅ Le warn de ${user} à était supprimé.`);
 
             return logs(interaction, 'Avertissement supprimé', `L'avertissement de ${user} à était supprimés.`);
         }
 
         if (warnNbr == 2) {
-            interaction.reply({
-                embeds: [response.setTitle('Choisir un avertissement à supprimer')],
-                components: [
-                    new ActionRowBuilder().addComponents(
-                        new SelectMenuBuilder()
-                            .setCustomId(`WarnChooseDelete, ${userId}, ${user}`)
-                            .setPlaceholder('Aucun avertissement selectionné')
-                            .addOptions([
-                                {
-                                    label: 'Avertissement 1',
-                                    description: `${warn1R}`,
-                                    value: 'first_warn'
-                                },
-                                {
-                                    label: 'Avertissement 2',
-                                    description: `${warn2R.substring(0, 50) || 'Aucun'}`,
-                                    value: 'seconde_warn'
-                                }
-                            ])
-                    )
-                ],
-                ephemeral: true
-            });
+            rspComponents(
+                interaction,
+                'Choisir un avertissement à supprimer',
+                ' ',
+                new ActionRowBuilder().addComponents(
+                    new SelectMenuBuilder()
+                        .setCustomId(`WarnChooseDelete, ${userId}, ${user}`)
+                        .setPlaceholder('Aucun avertissement selectionné')
+                        .addOptions([
+                            {
+                                label: 'Avertissement 1',
+                                description: `${warn1R}`,
+                                value: 'first_warn'
+                            },
+                            {
+                                label: 'Avertissement 2',
+                                description: `${warn2R.substring(0, 50) || 'Aucun'}`,
+                                value: 'seconde_warn'
+                            }
+                        ])
+                )
+            );
         }
     }
 };

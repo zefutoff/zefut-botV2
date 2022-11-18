@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, SelectMenuBuilder } = require('discord.js');
+const { ActionRowBuilder, SelectMenuBuilder } = require('discord.js');
 const { logs } = require('../../utils/embed');
 const { youtube, twitch, Mcreator } = require('../../utils/roles.json');
 

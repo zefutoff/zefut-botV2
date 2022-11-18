@@ -1,10 +1,17 @@
 const { EmbedBuilder } = require('discord.js');
-const { log } = require('./channels.json');
+
+const { log, administrator } = require('./channels.json');
 
 function error(interaction, description) {
     return interaction.reply({
         embeds: [new EmbedBuilder().setColor('#ED4245').setDescription(description)],
         ephemeral: true
+    });
+}
+
+function sendModal(modal, title) {
+    modal.guild.channels.cache.get(administrator).send({
+        embeds: [new EmbedBuilder().setTitle(modal.member.user.username + title).setDescription(modal.fields[0].value)]
     });
 }
 
@@ -15,9 +22,38 @@ function response(interaction, description) {
     });
 }
 
-function rspButton(interaction, description, button) {
+function rspInfo(interaction, description, User) {
     return interaction.reply({
-        embeds: [new EmbedBuilder().setColor('#57F287').setDescription(description)],
+        embeds: [
+            new EmbedBuilder()
+                .setColor('#57F287')
+                .setThumbnail(User.displayAvatarURL())
+                .setTitle(`Voici les informations concernant ${User.user.username} :`)
+                .setDescription(description)
+                .setTimestamp()
+        ],
+        ephemeral: true
+    });
+}
+
+function rspInfoComp(interaction, title, description, avatar, button) {
+    return interaction.reply({
+        embeds: [new EmbedBuilder().setColor('#57F287').setThumbnail(avatar).setTitle(title).setDescription(description).setTimestamp()],
+        components: [button],
+        ephemeral: true
+    });
+}
+
+function rspModal(interaction, target) {
+    return interaction.reply({
+        embeds: [new EmbedBuilder().setColor('#57F287').setDescription(`✅ ta demande à était transmise ${target} !`)],
+        ephemeral: true
+    });
+}
+
+function rspComponents(interaction, title, description, button) {
+    return interaction.reply({
+        embeds: [new EmbedBuilder().setTitle(title).setColor('#57F287').setDescription(description)],
         components: [button],
         ephemeral: true
     });
@@ -45,4 +81,4 @@ function logs(interaction, title, description) {
     });
 }
 
-module.exports = { permError, logs, error, response, rspButton };
+module.exports = { permError, logs, error, response, rspComponents, rspInfo, rspInfoComp, rspModal, sendModal };

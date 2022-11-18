@@ -1,13 +1,12 @@
 const {
     PermissionsBitField,
-    EmbedBuilder,
     CommandInteraction,
     ButtonBuilder,
     ActionRowBuilder,
     ButtonStyle,
     SlashCommandBuilder
 } = require('discord.js');
-const { permError, error, response, rspButton, logs } = require('../../utils/embed');
+const { permError, error, response, rspComponents, logs } = require('../../utils/embed');
 const { log } = require('../../utils/channels.json');
 
 const admin = require('firebase-admin');
@@ -90,7 +89,7 @@ module.exports = {
             }
 
             if (warn_number === '2') {
-                rspButton(
+                rspComponents(
                     interaction,
                     `${user} comptabilise dejà 2 warn ce qui veut dire qu'il va être bannis, confirme tu la sanction ? `,
                     new ActionRowBuilder().addComponents(
