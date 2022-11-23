@@ -1,0 +1,12 @@
+version: "3.3"
+
+services:
+  bot:
+    image: "zefut-bot-v2"
+    volumes:
+      - ./config.json:/usr/src/app/config.json
+      - ./serviceAccountKey.json:/usr/src/app/serviceAccountKey.json
+      - ./utils:/usr/src/app/utils
+    container_name: zefut-bot-v2
+    environment:
+      - TZ=Europe/Paris
