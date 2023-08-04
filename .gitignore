@@ -211,3 +211,5 @@ $RECYCLE.BIN/
 config.json
 utils/firebase.js
 serviceAccountKey.json
+docker-compose.yml
+Dockerfile
