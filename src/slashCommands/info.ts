@@ -51,31 +51,52 @@ export const command: SlashCommand = {
 
         logs(interaction, 'info', 'La commande info à était utilisé');
 
-        if (warnNbr === 0 && comNbr === 0) {
-            rspInfo(
-                interaction,
-                `:file_folder: ${User?.user.username}\n **Nom Complet :** ${User?.user.tag}\n **Surnom :** ${
-                    User?.nickname === null ? 'Aucun' : User?.nickname
-                }\n  **Id :** ${User?.id}\n **Compte Crée le** ${moment(User?.user.createdAt).format(
-                    'DD/MM/YYYY | HH:mm'
-                )}\n **Présent sur le serveur depuis le** ${moment(User?.joinedAt).format('DD/MM/YYYY | HH:mm')}\n
+        const title = `Voici les informations concernant ${User?.user.username} :`;
+
+        const description = `:file_folder: ${User?.user.username}\n **Nom Complet :** ${User?.user.tag}\n **Surnom :** ${
+            User?.nickname === null ? 'Aucun' : User?.nickname
+        }\n  **Id :** ${User?.id}\n **Compte Crée le** ${moment(User?.user.createdAt).format(
+            'DD/MM/YYYY | HH:mm'
+        )}\n **Présent sur le serveur depuis le** ${moment(User?.joinedAt).format('DD/MM/YYYY | HH:mm')}\n
                 **Nombre d'infraction(s) :** ${warnNbr}\n
-                **Nombre de commentaire(s) :** ${comNbr}`,
-                User
+                **Nombre de commentaire(s) :** ${comNbr}`;
+
+        const avatar = User?.displayAvatarURL();
+
+        if (warnNbr === 0 && comNbr === 0) {
+            rspInfo(interaction, description, User);
+        } else if (warnNbr === 1 && comNbr === 0) {
+            rspInfoComp(
+                interaction,
+                title,
+                description,
+                avatar,
+                new ActionRowBuilder<ButtonBuilder>().addComponents(
+                    new ButtonBuilder()
+                        .setLabel('Voir les avertissements')
+                        .setStyle(ButtonStyle.Primary)
+                        .setCustomId(`WarnInfo, ${User.id}, ${User}`)
+                )
+            );
+        } else if (warnNbr === 0 && comNbr === 1) {
+            rspInfoComp(
+                interaction,
+                title,
+                description,
+                avatar,
+                new ActionRowBuilder<ButtonBuilder>().addComponents(
+                    new ButtonBuilder()
+                        .setLabel('Voir les commentaires')
+                        .setStyle(ButtonStyle.Primary)
+                        .setCustomId(`CommentInfo, ${User.id}, ${User}`)
+                )
             );
         } else {
             rspInfoComp(
                 interaction,
-                `Voici les informations concernant ${User?.user.username} :`,
-                `:file_folder: ${User?.user.username}\n **Nom Complet :** ${User?.user.tag}\n **Surnom :** ${
-                    User?.nickname === null ? 'Aucun' : User?.nickname
-                }\n 
-                 **Id :** ${User.id}\n **Compte Crée le** ${moment(User?.user.createdAt).format(
-                    'DD/MM/YYYY | HH:mm'
-                )}\n **Présent sur le serveur depuis le** ${moment(User?.joinedAt).format('DD/MM/YYYY | HH:mm')}\n
-                **Nombre d'infraction(s) :** ${warnNbr}\n
-                **Nombre de commentaire(s) :** ${comNbr}`,
-                User?.displayAvatarURL(),
+                title,
+                description,
+                avatar,
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder()
                         .setLabel('Voir les avertissements')
